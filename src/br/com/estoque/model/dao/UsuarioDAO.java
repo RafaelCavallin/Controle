@@ -62,6 +62,33 @@ public class UsuarioDAO {
         return Usuarios;
     }
     
+    public Usuario readForId(int Id){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        Usuario user = new Usuario();
+        
+        try {
+            stmt = con.prepareStatement("SELECT * FROM Usuarios WHERE idUsuario = ?");
+            stmt.setInt(1, Id);
+            rs = stmt.executeQuery();
+            
+            while (rs.next()) {                
+                user.setIdUsuario(rs.getInt("idUsuario"));
+                user.setTipo(rs.getString("Tipo"));
+                user.setNome(rs.getString("Nome"));
+                user.setLogin(rs.getString("Login"));
+                user.setSenha(rs.getString("Senha"));
+                user.setEmail(rs.getString("Email"));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao retornar!" +ex);
+        }finally{
+            ConnectionFactory.CloseConnection(con, stmt, rs);
+        } 
+        return user;
+    }
+    
     public void update(Usuario u){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -103,20 +130,22 @@ public class UsuarioDAO {
         }
     } 
     
-    public boolean checklogin(String login, String Senha){
+    public int checklogin(String login, String Senha){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        Boolean check = false;
+        int idReturn = 0;
+        Usuario user = new Usuario();
         
         try {
-            stmt = con.prepareStatement("SELECT * FROM Usuarios where Login = ? AND Senha = ?");
+            stmt = con.prepareStatement("SELECT * FROM usuarios where Login = ? AND Senha = ?");
             stmt.setString(1, login);
             stmt.setString(2, Senha);
             rs = stmt.executeQuery();
             
             if(rs.next()){
-                check = true;
+                idReturn = rs.getInt(1);
+               
             }
             
         } catch (SQLException ex) {
@@ -124,6 +153,7 @@ public class UsuarioDAO {
         }finally{
             ConnectionFactory.CloseConnection(con, stmt, rs);
         }
-        return check;
-    }    
+ 
+       return idReturn;
+    }
 }

@@ -5,6 +5,7 @@
  */
 package br.com.estoque.view;
 
+import br.com.estoque.model.bean.Usuario;
 import br.com.estoque.model.dao.UsuarioDAO;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
@@ -132,14 +133,21 @@ public class Login extends javax.swing.JFrame {
         UsuarioDAO dao = new UsuarioDAO();
         String strPass = new String(txtSenha.getPassword()).trim();
         
-        if(dao.checklogin(txtUsuario.getText(), strPass)){
-            new ViewMain().setVisible(true);
-            this.dispose();
+        int verifica = dao.checklogin(txtUsuario.getText(), strPass);
+        
+        if(verifica != 0){
+            Usuario user = dao.readForId(verifica); 
+            if(user.getLogin().equals(txtUsuario.getText())){
+                new ViewMain(user).setVisible(true);
+                this.dispose();
+            }else{
+                JOptionPane.showMessageDialog(null, "Nome de usuário ou senha incorreto");
+            }
         }else{
-            JOptionPane.showMessageDialog(null, "Nome de usuário ou senha está incorreto");
-            txtUsuario.setText("");
-            txtSenha.setText("");
-        } 
+            JOptionPane.showMessageDialog(null, "Nome de usuário ou senha incorreto");
+        }    
+       txtUsuario.setText("");
+       txtSenha.setText("");     
     }//GEN-LAST:event_btnAcessarActionPerformed
 
     private void jPanel1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel1KeyPressed

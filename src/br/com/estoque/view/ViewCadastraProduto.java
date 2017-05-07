@@ -310,7 +310,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -357,14 +357,14 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
           ProdutoDAO dao = new ProdutoDAO();
           
           
-          //p.setCodigoDeBarras(txtCodProd.getText());
+          p.setCodigoDeBarras(Integer.parseInt(txtCodProd.getText()));
           p.setIdCategoria(jcbCategoria.getSelectedIndex());
           p.setDescricao(txtDescProd.getText());
           p.setIdFornecedor(jcbFornecedor.getSelectedIndex());
-          //p.setEstMinimo(txtEstMin.getText());
-          //p.setQuantidade(txtQtd.getText());
-          //p.setValorCusto(txtValorCusto.getText());
-          //p.setValorVenda(txtValorVenda.getText());
+          p.setEstMinimo(Integer.parseInt(txtEstMin.getText()));
+          p.setQuantidade(Integer.parseInt(txtQtd.getText()));
+          p.setValorCusto(Double.parseDouble(txtValorCusto.getText()));
+          p.setValorVenda(Double.parseDouble(txtValorVenda.getText()));
           p.setUnidadeDeMedida(jcbUniMed.getSelectedIndex());
           if(jcbEstado.isSelected()){
               p.setEstado(true);
