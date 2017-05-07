@@ -8,6 +8,7 @@ package br.com.estoque.view;
 import br.com.estoque.model.bean.Categoria;
 import br.com.estoque.model.bean.Fornecedor;
 import br.com.estoque.model.bean.Produto;
+import br.com.estoque.model.bean.Usuario;
 import br.com.estoque.model.dao.CategoriaDAO;
 import br.com.estoque.model.dao.FornecedorDAO;
 import br.com.estoque.model.dao.ProdutoDAO;
@@ -30,11 +31,16 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
 
     /**
      * Creates new form ViewCadastraProdutos
+     * @param user
      */
-    public ViewCadastraProduto() {
+    public ViewCadastraProduto(Usuario user) {
         initComponents();
         populaComboBoxCategoria();
         populaComboBoxForn();
+    }
+
+    ViewCadastraProduto() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -69,7 +75,6 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         jcbEstado = new javax.swing.JCheckBox();
         jPanel2 = new javax.swing.JPanel();
         lblImgProd = new javax.swing.JLabel();
-        txtFile = new javax.swing.JTextField();
         btnArquivoImg = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -78,6 +83,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         btnAlterarProd = new javax.swing.JButton();
         btnExcluirProd = new javax.swing.JButton();
+        txtFile = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Produtos");
@@ -240,7 +246,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                                        .addComponent(txtFile)
+                                        .addComponent(txtFile, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(btnArquivoImg, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -255,8 +261,8 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnArquivoImg)))
+                            .addComponent(btnArquivoImg)
+                            .addComponent(txtFile, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -344,8 +350,6 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         for(Fornecedor f : Fornecedor){
             jcbFornecedor.addItem(f.getRazaoSocial());
         }
-    
-    
     }
     
     
@@ -357,7 +361,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
           ProdutoDAO dao = new ProdutoDAO();
           
           
-          p.setCodigoDeBarras(Integer.parseInt(txtCodProd.getText()));
+          p.setCodigoDeBarras(txtCodProd.getText());
           p.setIdCategoria(jcbCategoria.getSelectedIndex());
           p.setDescricao(txtDescProd.getText());
           p.setIdFornecedor(jcbFornecedor.getSelectedIndex());
@@ -371,7 +375,11 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
           }else{
               p.setEstado(false);
           }
+          p.setImagem(txtFile.getText());
+          //dao.create(p);
           
+          System.out.println(p.getValorCusto());
+          System.out.println(p.getValorVenda());
           
           
       }  

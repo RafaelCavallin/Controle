@@ -294,8 +294,10 @@ public class ViewMain extends javax.swing.JFrame {
     }//GEN-LAST:event_MenuSairMouseClicked
 
     private void jCadProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCadProdutosActionPerformed
-        ViewCadastraProduto CadProd = new ViewCadastraProduto();
-        CadProd.setVisible(true);
+        //ViewCadastraProduto CadProd = new ViewCadastraProduto(user);
+        //CadProd.setVisible(true);
+        Usuario user = null;
+        new ViewCadastraProduto(user).setVisible(true); 
     }//GEN-LAST:event_jCadProdutosActionPerformed
 
     private void jCadCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCadCatActionPerformed

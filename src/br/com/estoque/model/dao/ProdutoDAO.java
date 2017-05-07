@@ -27,7 +27,7 @@ public class ProdutoDAO {
             stmt.setInt(2, p.getIdCategoria());
             stmt.setInt(3, p.getIdFornecedor());
             stmt.setString(4, p.getDescricao());
-            stmt.setInt(5, p.getCodigoDeBarras());
+            stmt.setString(5, p.getCodigoDeBarras());
             stmt.setDouble(6, p.getValorCusto());
             stmt.setDouble(7, p.getValorVenda());
             stmt.setInt(8, p.getEstMinimo());
@@ -66,7 +66,7 @@ public class ProdutoDAO {
                 p.setIdCategoria(rs.getInt("idCategoria"));
                 p.setIdFornecedor(rs.getInt("idFornecedor"));
                 p.setDescricao(rs.getString("Descricao"));
-                p.setCodigoDeBarras(rs.getInt("CodigoDeBarras"));
+                p.setCodigoDeBarras(rs.getString("CodigoDeBarras"));
                 p.setValorCusto(rs.getDouble("ValorCusto"));
                 p.setValorVenda(rs.getDouble("ValorVenda"));
                 p.setEstMinimo(rs.getInt("EstoqueMinimo"));
@@ -97,7 +97,7 @@ public class ProdutoDAO {
             stmt.setInt(2, p.getIdCategoria());
             stmt.setInt(3, p.getIdFornecedor());
             stmt.setString(4, p.getDescricao());
-            stmt.setInt(5, p.getCodigoDeBarras());
+            stmt.setString(5, p.getCodigoDeBarras());
             stmt.setDouble(6, p.getValorCusto());
             stmt.setDouble(7, p.getValorVenda());
             stmt.setInt(8, p.getEstMinimo());

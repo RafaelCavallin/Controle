@@ -9,7 +9,7 @@ public class Produto {
     private int IdCategoria;
     private int IdFornecedor;
     private String Descricao;
-    private int CodigoDeBarras;
+    private String CodigoDeBarras;
     private Double ValorCusto;
     private Double ValorVenda;
     private int EstMinimo;
@@ -59,11 +59,11 @@ public class Produto {
         this.Descricao = Descricao;
     }
 
-    public int getCodigoDeBarras() {
+    public String getCodigoDeBarras() {
         return CodigoDeBarras;
     }
 
-    public void setCodigoDeBarras(int CodigoDeBarras) {
+    public void setCodigoDeBarras(String CodigoDeBarras) {
         this.CodigoDeBarras = CodigoDeBarras;
     }
 

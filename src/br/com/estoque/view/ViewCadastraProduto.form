@@ -120,7 +120,7 @@
                                   <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                       <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                                       <Group type="102" alignment="1" attributes="0">
-                                          <Component id="txtFile" max="32767" attributes="0"/>
+                                          <Component id="txtFile" min="-2" pref="200" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="btnArquivoImg" min="-2" pref="95" max="-2" attributes="0"/>
                                       </Group>
@@ -143,8 +143,8 @@
                           <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="txtFile" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="btnArquivoImg" alignment="3" min="-2" max="-2" attributes="0"/>
+                              <Component id="txtFile" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -352,8 +352,6 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JTextField" name="txtFile">
-        </Component>
         <Component class="javax.swing.JButton" name="btnArquivoImg">
           <Properties>
             <Property name="text" type="java.lang.String" value="Arquivo"/>
@@ -425,6 +423,8 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Excluir"/>
           </Properties>
+        </Component>
+        <Component class="javax.swing.JTextField" name="txtFile">
         </Component>
       </SubComponents>
     </Container>
