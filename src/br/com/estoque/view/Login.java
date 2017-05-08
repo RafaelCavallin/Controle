@@ -5,6 +5,7 @@
  */
 package br.com.estoque.view;
 
+import br.com.estoque.connection.Sessao;
 import br.com.estoque.model.bean.Usuario;
 import br.com.estoque.model.dao.UsuarioDAO;
 import java.awt.event.KeyEvent;
@@ -138,8 +139,12 @@ public class Login extends javax.swing.JFrame {
         if(verifica != 0){
             Usuario user = dao.readForId(verifica); 
             if(user.getLogin().equals(txtUsuario.getText())){
-                new ViewMain(user).setVisible(true);
+                new ViewMain().setVisible(true);
                 this.dispose();
+                
+                Sessao sessao = Sessao.getInstance();
+                sessao.setUsuario(dao.readForId(verifica));
+                
             }else{
                 JOptionPane.showMessageDialog(null, "Nome de usuário ou senha incorreto");
             }

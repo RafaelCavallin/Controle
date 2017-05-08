@@ -22,9 +22,8 @@ public class ViewMain extends javax.swing.JFrame {
 
     /**
      * Creates new form ViewProduto
-     * @param user
      */
-    public ViewMain(Usuario user) {
+    public ViewMain() {
         initComponents();        
     }
 
@@ -112,23 +111,20 @@ public class ViewMain extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 694, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 694, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
-                                .addComponent(btnCadEntPri, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnCadSaiPri, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnConProPri, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())
+                        .addComponent(btnCadEntPri, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnCadSaiPri, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnConProPri, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtPesquisaMain, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -215,7 +211,12 @@ public class ViewMain extends javax.swing.JFrame {
         jFerEti.add(jMenuItem9);
 
         jFerFun.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/cog.png"))); // NOI18N
-        jFerFun.setText("Funções");
+        jFerFun.setText("Configurações");
+        jFerFun.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFerFunActionPerformed(evt);
+            }
+        });
         jFerEti.add(jFerFun);
 
         jFerBac.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/database_save.png"))); // NOI18N
@@ -294,10 +295,8 @@ public class ViewMain extends javax.swing.JFrame {
     }//GEN-LAST:event_MenuSairMouseClicked
 
     private void jCadProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCadProdutosActionPerformed
-        //ViewCadastraProduto CadProd = new ViewCadastraProduto(user);
-        //CadProd.setVisible(true);
-        Usuario user = null;
-        new ViewCadastraProduto(user).setVisible(true); 
+        ViewCadastraProduto CadProd = new ViewCadastraProduto();
+        CadProd.setVisible(true);
     }//GEN-LAST:event_jCadProdutosActionPerformed
 
     private void jCadCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCadCatActionPerformed
@@ -314,6 +313,10 @@ public class ViewMain extends javax.swing.JFrame {
         ViewBackup bkp = new ViewBackup();
         bkp.setVisible(true);
     }//GEN-LAST:event_jFerBacActionPerformed
+
+    private void jFerFunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFerFunActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jFerFunActionPerformed
 
     /**
      * @param args the command line arguments
@@ -348,8 +351,7 @@ public class ViewMain extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Usuario user = null;
-                new ViewMain(user).setVisible(true);
+                new ViewMain().setVisible(true);
             }
         });
     }

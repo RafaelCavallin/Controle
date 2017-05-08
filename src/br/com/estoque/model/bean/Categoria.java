@@ -21,5 +21,10 @@ public class Categoria {
     public void setDescricao(String Descricao) {
         this.Descricao = Descricao;
     } 
-
+    
+  
+    @Override
+    public String toString(){
+        return getDescricao();
+    }
 }

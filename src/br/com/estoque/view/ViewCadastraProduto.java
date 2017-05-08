@@ -5,6 +5,7 @@
  */
 package br.com.estoque.view;
 
+import br.com.estoque.connection.Sessao;
 import br.com.estoque.model.bean.Categoria;
 import br.com.estoque.model.bean.Fornecedor;
 import br.com.estoque.model.bean.Produto;
@@ -33,14 +34,10 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
      * Creates new form ViewCadastraProdutos
      * @param user
      */
-    public ViewCadastraProduto(Usuario user) {
+    public ViewCadastraProduto() {
         initComponents();
         populaComboBoxCategoria();
         populaComboBoxForn();
-    }
-
-    ViewCadastraProduto() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     /**
@@ -94,6 +91,12 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         lblDescProd.setText("Descrição:");
 
         lblCatProd.setText("Categoria:");
+
+        jcbCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jcbCategoriaActionPerformed(evt);
+            }
+        });
 
         jLabel4.setText("Fornecedor:");
 
@@ -164,6 +167,11 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/iconeCan.fw.png"))); // NOI18N
         jButton3.setText("     Cancelar");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Add Categoria");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -364,6 +372,13 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
           p.setCodigoDeBarras(txtCodProd.getText());
           p.setIdCategoria(jcbCategoria.getSelectedIndex());
           p.setDescricao(txtDescProd.getText());
+          
+          // Pegando id do usuario com Singleton
+          Usuario user = new Usuario();
+          user = Sessao.getInstance().getUsuario();
+                  
+          p.setIdUsuario(user.getIdUsuario());
+          
           p.setIdFornecedor(jcbFornecedor.getSelectedIndex());
           p.setEstMinimo(Integer.parseInt(txtEstMin.getText()));
           p.setQuantidade(Integer.parseInt(txtQtd.getText()));
@@ -376,11 +391,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
               p.setEstado(false);
           }
           p.setImagem(txtFile.getText());
-          //dao.create(p);
-          
-          System.out.println(p.getValorCusto());
-          System.out.println(p.getValorVenda());
-          
+          dao.create(p);      
           
       }  
         
@@ -409,14 +420,21 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
            // O código abaixo não redimenciona a imagem
            // lblImgProd.setIcon(new ImageIcon(file.getPath()));
         }
-        
-        
-        
+
     }//GEN-LAST:event_btnArquivoImgActionPerformed
 
     private void jcbFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbFornecedorActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jcbFornecedorActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+       
+        JOptionPane.showMessageDialog(null, txtFile.getText());
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jcbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriaActionPerformed
+        
+    }//GEN-LAST:event_jcbCategoriaActionPerformed
 
     /**
      * @param args the command line arguments

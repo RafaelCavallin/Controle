@@ -2,6 +2,11 @@ package br.com.estoque.model.dao;
 
 import br.com.estoque.connection.ConnectionFactory;
 import br.com.estoque.model.bean.Produto;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -21,28 +26,30 @@ public class ProdutoDAO {
         PreparedStatement stmt = null;
         
         try {
-            stmt = con.prepareStatement("INSERT INTO produtos (idUsuario, idCategoria, IdFornecedor, Descrcao, CadigoDeBarras, ValorCusto, ValorVenda, EstoqueMinimo, Quantidade, UnidMedida, Estado, DataCadastro, Imagem) "
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
-            stmt.setInt(1, p.getIdUsuario());
-            stmt.setInt(2, p.getIdCategoria());
-            stmt.setInt(3, p.getIdFornecedor());
-            stmt.setString(4, p.getDescricao());
-            stmt.setString(5, p.getCodigoDeBarras());
-            stmt.setDouble(6, p.getValorCusto());
-            stmt.setDouble(7, p.getValorVenda());
-            stmt.setInt(8, p.getEstMinimo());
-            stmt.setInt(9, p.getQuantidade());
-            stmt.setInt(10, p.getUnidadeDeMedida());
-            stmt.setBoolean(11, p.getEstado());
-            stmt.setDate(12, (Date) p.getDataCadastro());
-            stmt.setString(13, p.getImagem());
+            stmt = con.prepareStatement("INSERT INTO produtos (idProduto, idUsuario, idCategoria, IdFornecedor, Descricao, CodigoDeBarras, ValorCusto, ValorVenda, EstoqueMinimo, Quantidade, UnidMedida, Estado, DataCadastro, Imagem) "
+                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            stmt.setInt(1, p.getIdProduto());
+            stmt.setInt(2, p.getIdUsuario());
+            //stmt.setInt(3, p.getIdCategoria());
+            stmt.setInt(3, 1);
+            stmt.setInt(4, p.getIdFornecedor());
+            stmt.setString(5, p.getDescricao());
+            stmt.setString(6, p.getCodigoDeBarras());
+            stmt.setDouble(7, p.getValorCusto());
+            stmt.setDouble(8, p.getValorVenda());
+            stmt.setInt(9, p.getEstMinimo());
+            stmt.setInt(10, p.getQuantidade());
+            stmt.setInt(11, p.getUnidadeDeMedida());
+            stmt.setBoolean(12, p.getEstado());
+            stmt.setDate(13, (Date) p.getDataCadastro());
+            stmt.setString(14, p.getImagem());
             
             stmt.executeUpdate();
             
             JOptionPane.showMessageDialog(null, "Cadastrado com Sucesso!");
             
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao salvar!" +ex);
+            JOptionPane.showMessageDialog(null, "Erro ao salvar! - Contate o administrador - Erro: " +ex);
         } finally{
             ConnectionFactory.CloseConnection(con, stmt);
         } 
@@ -91,7 +98,7 @@ public class ProdutoDAO {
         PreparedStatement stmt = null;
         
         try {
-            stmt = con.prepareStatement("INSERT INTO produtos (idUsuario, idCategoria, IdFornecedor, Descrcao, CadigoDeBarras, ValorCusto, ValorVenda, EstoqueMinimo, Quantidade, UnidMedida, Estado, DataCadastro, Imagem) "
+            stmt = con.prepareStatement("INSERT INTO produtos (idUsuario, idCategoria, IdFornecedor, Descricao, CadigoDeBarras, ValorCusto, ValorVenda, EstoqueMinimo, Quantidade, UnidMedida, Estado, DataCadastro, Imagem) "
                     + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
             stmt.setInt(1, p.getIdUsuario());
             stmt.setInt(2, p.getIdCategoria());
@@ -116,6 +123,39 @@ public class ProdutoDAO {
         } finally{
             ConnectionFactory.CloseConnection(con, stmt);
         } 
+    }
+    
+    @SuppressWarnings("empty-statement")
+    public void CopyImg(String origemArquivo, String destinoArquivo ) throws IOException{
+        
+        File origem = new File(origemArquivo);
+        File destino = new File(destinoArquivo);
+        
+        if(destino.exists()){
+            destino.delete();
+        }
+        FileChannel origemChannel = null;
+        FileChannel destinoChannel = null;
+        
+        try {
+            origemChannel = new FileInputStream(origem).getChannel();
+            destinoChannel = new FileOutputStream(destino).getChannel();
+            origemChannel.transferTo(0, origemChannel.size(), destinoChannel);
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao transferir imagem - " + ex);
+        }finally{
+            if(origemChannel != null && origemChannel.isOpen()){
+                origemChannel.close();
+            }
+            if(destinoChannel != null && destinoChannel.isOpen()){
+                destinoChannel.close();;
+            }
+                
+        }
+        
+       
+        
+        
     }
     
 }

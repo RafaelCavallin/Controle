@@ -32,7 +32,7 @@ public class CategoriaDAO {
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        List<Categoria> Categorias = new ArrayList<>();
+        List<Categoria> ListaCategorias = new ArrayList<>();
         
         try {
             stmt = con.prepareStatement("SELECT * FROM categorias");
@@ -43,14 +43,14 @@ public class CategoriaDAO {
                 c.setIdCategoria(rs.getInt("idCategoria"));
                 c.setDescricao(rs.getString("Descricao"));
 
-                Categorias.add(c);
+                ListaCategorias.add(c);
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao retornar!" +ex);
         }finally{
             ConnectionFactory.CloseConnection(con, stmt, rs);
         } 
-        return Categorias;
+        return ListaCategorias;
     }
     
     public void update(Categoria c){
