@@ -13,12 +13,13 @@ import br.com.estoque.model.bean.Usuario;
 import br.com.estoque.model.dao.CategoriaDAO;
 import br.com.estoque.model.dao.FornecedorDAO;
 import br.com.estoque.model.dao.ProdutoDAO;
-import java.awt.Component;
 import java.awt.Image;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -340,14 +341,15 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         CadCat.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
     
-    public void populaComboBoxCategoria(){
+    public void populaComboBoxCategoria(){     
         CategoriaDAO dao = new CategoriaDAO();
         List<Categoria> Categorias = new ArrayList<>();
         Categorias = dao.read();
-        
-       for (Categoria c : Categorias) {
-           jcbCategoria.addItem(c.getDescricao());
-       }
+                
+        for(int i=0; i<Categorias.size(); i++){
+            //System.out.println(Categorias.get(i).getIdCategoria());
+            //jcbCategoria.addItem(Categorias.get(i));
+        }
     }
     
     public void populaComboBoxForn(){
@@ -428,8 +430,15 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_jcbFornecedorActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+       ProdutoDAO dao = new ProdutoDAO();
+       String ori = txtFile.getText();
+       String des = "C:\\Users\\Rafael\\Documents\\NetBeansProjects\\Controle2\\src\\img";
        
-        JOptionPane.showMessageDialog(null, txtFile.getText());
+        try {
+            dao.CopyImg(ori, des);
+        } catch (IOException ex) {
+            Logger.getLogger(ViewCadastraProduto.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jcbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriaActionPerformed

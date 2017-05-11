@@ -25,6 +25,6 @@ public class Categoria {
   
     @Override
     public String toString(){
-        return getDescricao();
+        return this.Descricao;
     }
 }

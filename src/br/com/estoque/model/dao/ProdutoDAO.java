@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 
 public class ProdutoDAO {
     
@@ -129,7 +130,10 @@ public class ProdutoDAO {
     public void CopyImg(String origemArquivo, String destinoArquivo ) throws IOException{
         
         File origem = new File(origemArquivo);
-        File destino = new File(destinoArquivo);
+        File destino = new File(destinoArquivo + "\\" + origem.getName());
+        
+        //System.out.println(destinoArquivo + "\\" + origem.getName());
+        //System.out.println(origemArquivo);
         
         if(destino.exists()){
             destino.delete();
@@ -153,9 +157,5 @@ public class ProdutoDAO {
                 
         }
         
-       
-        
-        
     }
-    
 }
