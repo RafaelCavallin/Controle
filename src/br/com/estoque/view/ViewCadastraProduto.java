@@ -16,6 +16,10 @@ import br.com.estoque.model.dao.ProdutoDAO;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -195,7 +199,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnAlterarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -345,11 +349,10 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         CategoriaDAO dao = new CategoriaDAO();
         List<Categoria> Categorias = new ArrayList<>();
         Categorias = dao.read();
-                
-        for(int i=0; i<Categorias.size(); i++){
-            //System.out.println(Categorias.get(i).getIdCategoria());
-            //jcbCategoria.addItem(Categorias.get(i));
-        }
+        
+       for (Categoria c : Categorias) {
+           jcbCategoria.addItem(c.getDescricao());
+       }
     }
     
     public void populaComboBoxForn(){
@@ -369,10 +372,11 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
       }else{
           Produto p = new Produto();
           ProdutoDAO dao = new ProdutoDAO();
+          CategoriaDAO daoCat = new CategoriaDAO();
+          FornecedorDAO daoFor = new FornecedorDAO();
           
-          
-          p.setCodigoDeBarras(txtCodProd.getText());
-          p.setIdCategoria(jcbCategoria.getSelectedIndex());
+          p.setCodigoDeBarras(txtCodProd.getText());      
+          p.setIdCategoria(daoCat.readForDesc((String) jcbCategoria.getSelectedItem()));
           p.setDescricao(txtDescProd.getText());
           
           // Pegando id do usuario com Singleton
@@ -380,19 +384,20 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
           user = Sessao.getInstance().getUsuario();
                   
           p.setIdUsuario(user.getIdUsuario());
-          
-          p.setIdFornecedor(jcbFornecedor.getSelectedIndex());
+          p.setIdFornecedor(daoFor.readIdForDesc((String) jcbFornecedor.getSelectedItem()));
           p.setEstMinimo(Integer.parseInt(txtEstMin.getText()));
           p.setQuantidade(Integer.parseInt(txtQtd.getText()));
-          p.setValorCusto(Double.parseDouble(txtValorCusto.getText()));
-          p.setValorVenda(Double.parseDouble(txtValorVenda.getText()));
-          p.setUnidadeDeMedida(jcbUniMed.getSelectedIndex());
+
+          //p.setValorCusto((txtValorCusto.getText()));
+          //p.setValorVenda((txtValorVenda.getText()));
+          p.setUnidadeDeMedida((String) jcbUniMed.getSelectedItem());
           if(jcbEstado.isSelected()){
               p.setEstado(true);
           }else{
               p.setEstado(false);
           }
-          p.setImagem(txtFile.getText());
+          File file = new File(txtFile.getText());
+          p.setImagem(file.getName());
           dao.create(p);      
           
       }  
@@ -430,15 +435,9 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_jcbFornecedorActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       ProdutoDAO dao = new ProdutoDAO();
-       String ori = txtFile.getText();
-       String des = "C:\\Users\\Rafael\\Documents\\NetBeansProjects\\Controle2\\src\\img";
        
-        try {
-            dao.CopyImg(ori, des);
-        } catch (IOException ex) {
-            Logger.getLogger(ViewCadastraProduto.class.getName()).log(Level.SEVERE, null, ex);
-        }
+          
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jcbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriaActionPerformed
