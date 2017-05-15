@@ -20,6 +20,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -80,8 +81,8 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         btnArquivoImg = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        btnSalvarProd = new javax.swing.JButton();
+        btnCancelarProd = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         btnAlterarProd = new javax.swing.JButton();
         btnExcluirProd = new javax.swing.JButton();
@@ -97,6 +98,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
 
         lblCatProd.setText("Categoria:");
 
+        jcbCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione" }));
         jcbCategoria.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbCategoriaActionPerformed(evt);
@@ -105,6 +107,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
 
         jLabel4.setText("Fornecedor:");
 
+        jcbFornecedor.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione" }));
         jcbFornecedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jcbFornecedorActionPerformed(evt);
@@ -162,19 +165,19 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/íconeCad.fw.png"))); // NOI18N
-        jButton1.setText("   Salvar");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSalvarProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/íconeCad.fw.png"))); // NOI18N
+        btnSalvarProd.setText("   Salvar");
+        btnSalvarProd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnSalvarProdActionPerformed(evt);
             }
         });
 
-        jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/iconeCan.fw.png"))); // NOI18N
-        jButton3.setText("     Cancelar");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnCancelarProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/iconeCan.fw.png"))); // NOI18N
+        btnCancelarProd.setText("     Cancelar");
+        btnCancelarProd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnCancelarProdActionPerformed(evt);
             }
         });
 
@@ -198,18 +201,9 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAlterarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnExcluirProd, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 762, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -261,9 +255,17 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                         .addComponent(txtFile, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(btnArquivoImg, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                        .addComponent(btnArquivoImg, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(btnSalvarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnAlterarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnExcluirProd, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(btnCancelarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -318,11 +320,11 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnCancelarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSalvarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnAlterarProd, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnExcluirProd, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -333,7 +335,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -344,6 +346,21 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         ViewCadastraCategoria CadCat = new ViewCadastraCategoria();
         CadCat.setVisible(true);
     }//GEN-LAST:event_jButton2ActionPerformed
+    
+    public void limpaFormProdutos(){
+        txtCodProd.setText("");
+        txtDescProd.setText("");
+        txtEstMin.setText("");
+        txtFile.setText("");
+        txtQtd.setText("");
+        txtValorCusto.setText("");
+        txtValorVenda.setText("");
+        jcbEstado.setSelected(true);
+        jcbCategoria.setSelectedIndex(0);
+        jcbFornecedor.setSelectedIndex(0);
+        jcbUniMed.setSelectedIndex(0);
+        lblImgProd.setIcon(null);
+    }
     
     public void populaComboBoxCategoria(){     
         CategoriaDAO dao = new CategoriaDAO();
@@ -365,9 +382,8 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         }
     }
     
-    
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      if((txtCodProd.getText().length() <= 0) || (txtDescProd.getText().length() <= 0) || (txtEstMin.getText().length() <= 0) || (txtQtd.getText().length() <= 0) || (txtValorCusto.getText().length() <= 0) || (txtValorVenda.getText().length() <= 0) || (jcbCategoria.getSelectedItem() == "") || (jcbFornecedor.getSelectedItem() == "") || (jcbUniMed.getSelectedItem() == "")){
+    private void btnSalvarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalvarProdActionPerformed
+      if((txtCodProd.getText().length() <= 0) || (txtDescProd.getText().length() <= 0) || (txtEstMin.getText().length() <= 0) || (txtQtd.getText().length() <= 0) || (txtValorCusto.getText().length() <= 0) || (txtValorVenda.getText().length() <= 0) || (jcbCategoria.getSelectedItem() == "Selecione") || (jcbFornecedor.getSelectedItem() == "Selecione") || (jcbUniMed.getSelectedItem() == "")){
           JOptionPane.showMessageDialog(null, "Favor preencher todos os campos obrigatórios");
       }else{
           Produto p = new Produto();
@@ -387,9 +403,17 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
           p.setIdFornecedor(daoFor.readIdForDesc((String) jcbFornecedor.getSelectedItem()));
           p.setEstMinimo(Integer.parseInt(txtEstMin.getText()));
           p.setQuantidade(Integer.parseInt(txtQtd.getText()));
-
-          //p.setValorCusto((txtValorCusto.getText()));
-          //p.setValorVenda((txtValorVenda.getText()));
+          
+          String valorCusto = txtValorCusto.getText();
+          String valorCustoBanco = valorCusto.replace(",", ".");
+          BigDecimal valorCustoBig = new BigDecimal(valorCustoBanco);
+          
+          String valorVenda = txtValorVenda.getText();
+          String valorVendaBanco = valorVenda.replace(",", ".");
+          BigDecimal valorVendaBig = new BigDecimal(valorVendaBanco);
+          
+          p.setValorCusto(valorCustoBig);
+          p.setValorVenda(valorVendaBig);
           p.setUnidadeDeMedida((String) jcbUniMed.getSelectedItem());
           if(jcbEstado.isSelected()){
               p.setEstado(true);
@@ -398,12 +422,26 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
           }
           File file = new File(txtFile.getText());
           p.setImagem(file.getName());
-          dao.create(p);      
           
+          // Envia a imagem para pasta de imagens de produto.
+          String origemArquivo = txtFile.getText();
+          String destinoArquivo = "C:\\Users\\Rafael\\Documents\\NetBeansProjects\\Controle2\\src\\img";
+            try {
+                dao.CopyImg(origemArquivo, destinoArquivo);
+            } catch (IOException ex) {
+                Logger.getLogger(ViewCadastraProduto.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            // Data para enviar para o banco. Data de cadastro do produto.
+            LocalDate dataCadProd = LocalDate.now();
+            p.setDataCadastro(dataCadProd);
+            
+          dao.create(p);      
+          limpaFormProdutos();
       }  
         
        
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnSalvarProdActionPerformed
 
     private void btnArquivoImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArquivoImgActionPerformed
         JFileChooser fileChooser = new JFileChooser();
@@ -434,11 +472,9 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jcbFornecedorActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-       
-          
-
-    }//GEN-LAST:event_jButton3ActionPerformed
+    private void btnCancelarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarProdActionPerformed
+        limpaFormProdutos();
+    }//GEN-LAST:event_btnCancelarProdActionPerformed
 
     private void jcbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriaActionPerformed
         
@@ -481,10 +517,10 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAlterarProd;
     private javax.swing.JButton btnArquivoImg;
+    private javax.swing.JButton btnCancelarProd;
     private javax.swing.JButton btnExcluirProd;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnSalvarProd;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

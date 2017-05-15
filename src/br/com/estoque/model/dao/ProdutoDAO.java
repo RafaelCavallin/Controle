@@ -12,10 +12,11 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.util.converter.LocalDateStringConverter;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
@@ -31,18 +32,19 @@ public class ProdutoDAO {
                     + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
             stmt.setInt(1, p.getIdProduto());
             stmt.setInt(2, p.getIdUsuario());
-            //stmt.setInt(3, p.getIdCategoria());
-            stmt.setInt(3, 1);
+            stmt.setInt(3, p.getIdCategoria());
             stmt.setInt(4, p.getIdFornecedor());
             stmt.setString(5, p.getDescricao());
             stmt.setString(6, p.getCodigoDeBarras());
-            stmt.setDouble(7, p.getValorCusto());
-            stmt.setDouble(8, p.getValorVenda());
+            stmt.setBigDecimal(7, p.getValorCusto());
+            stmt.setBigDecimal(8, p.getValorVenda());
             stmt.setInt(9, p.getEstMinimo());
             stmt.setInt(10, p.getQuantidade());
-            stmt.setInt(11, p.getUnidadeDeMedida());
+            stmt.setString(11, p.getUnidadeDeMedida());
             stmt.setBoolean(12, p.getEstado());
-            stmt.setDate(13, (Date) p.getDataCadastro());
+            
+            // Convertendo LocalDate em data para enviar para o banco
+            stmt.setDate(13, Date.valueOf(p.getDataCadastro()));
             stmt.setString(14, p.getImagem());
             
             stmt.executeUpdate();
@@ -75,13 +77,15 @@ public class ProdutoDAO {
                 p.setIdFornecedor(rs.getInt("idFornecedor"));
                 p.setDescricao(rs.getString("Descricao"));
                 p.setCodigoDeBarras(rs.getString("CodigoDeBarras"));
-                p.setValorCusto(rs.getDouble("ValorCusto"));
-                p.setValorVenda(rs.getDouble("ValorVenda"));
+                p.setValorCusto(rs.getBigDecimal("ValorCusto"));
+                p.setValorVenda(rs.getBigDecimal("ValorVenda"));
                 p.setEstMinimo(rs.getInt("EstoqueMinimo"));
                 p.setQuantidade(rs.getInt("Quantidade"));
-                p.setUnidadeDeMedida(rs.getInt("UnidMedida"));
+                p.setUnidadeDeMedida(rs.getString("UnidMedida"));
                 p.setEstado(rs.getBoolean("Estado"));
-                p.setDataCadastro(rs.getDate("DataCadastro"));
+                // Conertendo a data do banco em LocalDate para o objeto
+                LocalDate dataCad = rs.getDate("DataCadastro").toLocalDate();
+                p.setDataCadastro(dataCad);
                 p.setImagem(rs.getString("Imagem"));
                 Produtos.add(p); 
             }
@@ -106,13 +110,13 @@ public class ProdutoDAO {
             stmt.setInt(3, p.getIdFornecedor());
             stmt.setString(4, p.getDescricao());
             stmt.setString(5, p.getCodigoDeBarras());
-            stmt.setDouble(6, p.getValorCusto());
-            stmt.setDouble(7, p.getValorVenda());
+            stmt.setBigDecimal(6, p.getValorCusto());
+            stmt.setBigDecimal(7, p.getValorVenda());
             stmt.setInt(8, p.getEstMinimo());
             stmt.setInt(9, p.getQuantidade());
-            stmt.setInt(10, p.getUnidadeDeMedida());
+            stmt.setString(10, p.getUnidadeDeMedida());
             stmt.setBoolean(11, p.getEstado());
-            stmt.setDate(12, (Date) p.getDataCadastro());
+            stmt.setDate(12, Date.valueOf(p.getDataCadastro()));
             stmt.setString(13, p.getImagem());
             
             stmt.executeUpdate();
@@ -157,5 +161,5 @@ public class ProdutoDAO {
                 
         }
         
-    }
+    }  
 }

@@ -2,6 +2,7 @@ package br.com.estoque.model.dao;
 
 import br.com.estoque.connection.ConnectionFactory;
 import br.com.estoque.model.bean.Categoria;
+import java.net.ConnectException;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +52,27 @@ public class CategoriaDAO {
             ConnectionFactory.CloseConnection(con, stmt, rs);
         } 
         return ListaCategorias;
+    }
+    
+    public int readForDesc(String descricao){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int id = 0;
+        
+        try {
+            stmt = con.prepareCall("SELECT * FROM categorias WHERE Descricao = ?");
+            stmt.setString(1, descricao);
+            rs = stmt.executeQuery();
+            
+            while(rs.next()){
+                id = rs.getInt("idCategoria");
+            }
+            
+        } catch (SQLException e) {
+            System.out.println("Erro ao retornar o id - " +e);
+        }
+        return id;
     }
     
     public void update(Categoria c){

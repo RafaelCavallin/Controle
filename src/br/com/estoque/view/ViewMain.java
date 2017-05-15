@@ -5,14 +5,24 @@
  */
 package br.com.estoque.view;
 
+import br.com.estoque.connection.ConnectionFactory;
+import br.com.estoque.model.bean.EmailRelatorios;
 import br.com.estoque.model.bean.Usuario;
+import java.sql.Connection;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
+import org.apache.commons.mail.EmailException;
 
 /**
  *
@@ -58,8 +68,8 @@ public class ViewMain extends javax.swing.JFrame {
         jRelFor = new javax.swing.JMenuItem();
         jFerEti = new javax.swing.JMenu();
         jMenuItem9 = new javax.swing.JMenuItem();
-        jFerFun = new javax.swing.JMenuItem();
         jFerBac = new javax.swing.JMenuItem();
+        jMenuConfig = new javax.swing.JMenuItem();
         MenuSair = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -101,6 +111,11 @@ public class ViewMain extends javax.swing.JFrame {
         jScrollPane1.setViewportView(JTProdutos);
 
         jButton1.setText("Configurações");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Buscar");
 
@@ -188,6 +203,11 @@ public class ViewMain extends javax.swing.JFrame {
 
         jRelPro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/package.png"))); // NOI18N
         jRelPro.setText("Produtos");
+        jRelPro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRelProActionPerformed(evt);
+            }
+        });
         MenuRelatorios.add(jRelPro);
 
         jRelUsu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/user.png"))); // NOI18N
@@ -210,15 +230,6 @@ public class ViewMain extends javax.swing.JFrame {
         jMenuItem9.setText("Etiquetas");
         jFerEti.add(jMenuItem9);
 
-        jFerFun.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/cog.png"))); // NOI18N
-        jFerFun.setText("Configurações");
-        jFerFun.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jFerFunActionPerformed(evt);
-            }
-        });
-        jFerEti.add(jFerFun);
-
         jFerBac.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/database_save.png"))); // NOI18N
         jFerBac.setText("Backup");
         jFerBac.addActionListener(new java.awt.event.ActionListener() {
@@ -227,6 +238,15 @@ public class ViewMain extends javax.swing.JFrame {
             }
         });
         jFerEti.add(jFerBac);
+
+        jMenuConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/cog.png"))); // NOI18N
+        jMenuConfig.setText("Configurações");
+        jMenuConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuConfigActionPerformed(evt);
+            }
+        });
+        jFerEti.add(jMenuConfig);
 
         MenuPrincipal.add(jFerEti);
 
@@ -310,13 +330,34 @@ public class ViewMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jCadForActionPerformed
 
     private void jFerBacActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFerBacActionPerformed
-        ViewBackup bkp = new ViewBackup();
-        bkp.setVisible(true);
+        
     }//GEN-LAST:event_jFerBacActionPerformed
 
-    private void jFerFunActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFerFunActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jFerFunActionPerformed
+    private void jMenuConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuConfigActionPerformed
+        ViewConfiguracoes conf = new ViewConfiguracoes();
+        conf.setVisible(true);
+    }//GEN-LAST:event_jMenuConfigActionPerformed
+
+    private void jRelProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRelProActionPerformed
+        Connection conn = ConnectionFactory.getConnection();
+        String src= "Produtos.jasper";
+        
+        JasperPrint jasperPrint = null;
+        try {
+            jasperPrint = JasperFillManager.fillReport(src, null, conn);
+        } catch (JRException ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível gerar o relatório. - Erro: "+ex);
+        }
+        
+        JasperViewer view = new JasperViewer(jasperPrint, false);
+        view.setVisible(true);
+        
+    }//GEN-LAST:event_jRelProActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        EmailRelatorios email = new EmailRelatorios();
+        email.enviaEmail();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -373,7 +414,7 @@ public class ViewMain extends javax.swing.JFrame {
     private javax.swing.JMenuItem jCadUsu;
     private javax.swing.JMenuItem jFerBac;
     private javax.swing.JMenu jFerEti;
-    private javax.swing.JMenuItem jFerFun;
+    private javax.swing.JMenuItem jMenuConfig;
     private javax.swing.JMenuItem jMenuItem9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JMenuItem jRelCat;

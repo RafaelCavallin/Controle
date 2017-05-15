@@ -1,5 +1,7 @@
 package br.com.estoque.model.bean;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Produto {
@@ -10,13 +12,13 @@ public class Produto {
     private int IdFornecedor;
     private String Descricao;
     private String CodigoDeBarras;
-    private Double ValorCusto;
-    private Double ValorVenda;
+    private BigDecimal ValorCusto;
+    private BigDecimal ValorVenda;
     private int EstMinimo;
     private int Quantidade;
-    private int UnidadeDeMedida;
+    private String UnidadeDeMedida;
     private Boolean Estado;
-    private Date DataCadastro;
+    private LocalDate DataCadastro;
     private String Imagem;
 
     public int getIdProduto() {
@@ -67,19 +69,19 @@ public class Produto {
         this.CodigoDeBarras = CodigoDeBarras;
     }
 
-    public Double getValorCusto() {
+    public BigDecimal getValorCusto() {
         return ValorCusto;
     }
 
-    public void setValorCusto(Double ValorCusto) {
+    public void setValorCusto(BigDecimal ValorCusto) {
         this.ValorCusto = ValorCusto;
     }
 
-    public Double getValorVenda() {
+    public BigDecimal getValorVenda() {
         return ValorVenda;
     }
 
-    public void setValorVenda(Double ValorVenda) {
+    public void setValorVenda(BigDecimal ValorVenda) {
         this.ValorVenda = ValorVenda;
     }
 
@@ -99,11 +101,11 @@ public class Produto {
         this.Quantidade = Quantidade;
     }
 
-    public int getUnidadeDeMedida() {
+    public String getUnidadeDeMedida() {
         return UnidadeDeMedida;
     }
 
-    public void setUnidadeDeMedida(int UnidadeDeMedida) {
+    public void setUnidadeDeMedida(String UnidadeDeMedida) {
         this.UnidadeDeMedida = UnidadeDeMedida;
     }
 
@@ -115,11 +117,11 @@ public class Produto {
         this.Estado = Estado;
     }
 
-    public Date getDataCadastro() {
+    public LocalDate getDataCadastro() {
         return DataCadastro;
     }
 
-    public void setDataCadastro(Date DataCadastro) {
+    public void setDataCadastro(LocalDate DataCadastro) {
         this.DataCadastro = DataCadastro;
     }
 

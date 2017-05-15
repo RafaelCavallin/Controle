@@ -78,6 +78,27 @@ public class FornecedorDAO {
         return Fornecedores;
     }
     
+    public int readIdForDesc(String descricao){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int id = 0;
+        
+        try {
+             stmt = con.prepareStatement("SELECT * FROM fornecedores WHERE razaSocial = ?");
+             stmt.setString(1, descricao);
+             rs = stmt.executeQuery();
+             
+             while (rs.next()) {                
+                id = rs.getInt("idFornecedor");
+            }
+             
+        } catch (SQLException e) {
+            System.out.println("Erro ao retornar ID do fornecedor - " +e);
+        }
+        return id;
+    }
+    
     public void update(Fornecedor f){
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
