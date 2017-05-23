@@ -2,10 +2,12 @@ package br.com.estoque.model.dao;
 
 import br.com.estoque.connection.ConnectionFactory;
 import br.com.estoque.model.bean.Produto;
+import static groovy.sql.Sql.resultSet;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.nio.channels.FileChannel;
 import java.sql.Connection;
 import java.sql.Date;
@@ -13,12 +15,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.util.converter.LocalDateStringConverter;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
 
 public class ProdutoDAO {
     
@@ -83,14 +83,20 @@ public class ProdutoDAO {
                 p.setQuantidade(rs.getInt("Quantidade"));
                 p.setUnidadeDeMedida(rs.getString("UnidMedida"));
                 p.setEstado(rs.getBoolean("Estado"));
-                // Conertendo a data do banco em LocalDate para o objeto
+                // Convertendo a data do banco em LocalDate para o objeto
                 LocalDate dataCad = rs.getDate("DataCadastro").toLocalDate();
-                p.setDataCadastro(dataCad);
+                DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                
+                String dataEmString = dataCad.format(formatador);
+                
+                LocalDate dataCadConvertida= LocalDate.parse(dataEmString, formatador);
+                
+                p.setDataCadastro(dataCadConvertida);
                 p.setImagem(rs.getString("Imagem"));
                 Produtos.add(p); 
             }
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao retornar!" +ex);
+            JOptionPane.showMessageDialog(null, "Erro ao retornar! - " +ex.getLocalizedMessage());
         }finally{
             ConnectionFactory.CloseConnection(con, stmt, rs);
         }  
@@ -157,9 +163,85 @@ public class ProdutoDAO {
             }
             if(destinoChannel != null && destinoChannel.isOpen()){
                 destinoChannel.close();;
-            }
+            }     
+        }   
+    } 
+    
+    public List<Produto> readProdForDesc(String busca){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Produto> Produto = new ArrayList<>();
+        
+        try {
+            stmt = con.prepareStatement("SELECT * FROM produtos WHERE Descricao LIKE ?");
+            stmt.setString(0, "%"+ busca +"%");
+            rs = stmt.executeQuery();
+            
+            while (rs.next()) {                
+                Produto p = new Produto();
+                p.setIdProduto(rs.getInt("idProduto"));
+                p.setIdCategoria(rs.getInt("idCategoria"));
+                p.setIdUsuario(rs.getInt("idUsuario"));
+                p.setIdFornecedor(rs.getInt("idFornecedor"));
+                p.setDescricao(rs.getString("Descricao"));
+                p.setCodigoDeBarras(rs.getString("CodigoDeBarras"));
                 
+                BigDecimal bigValorCusto = new BigDecimal(rs.getString("ValorCusto"));
+                p.setValorCusto(bigValorCusto);
+                
+                BigDecimal bigValorVenda = new BigDecimal(rs.getInt("ValorVenda"));
+                p.setValorVenda(bigValorVenda);
+                
+                p.setEstMinimo(rs.getInt("EstoqueMinimo"));
+                p.setQuantidade(rs.getInt("Quantidade"));
+                p.setUnidadeDeMedida(rs.getString("UnidMedida"));
+                p.setEstMinimo(rs.getInt("Estado"));
+                p.setDataCadastro(rs.getDate("DataCadastro").toLocalDate());
+                p.setImagem(rs.getString("Imagem"));
+                
+                Produto.add(p);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao retornar! (Lista) - " +ex);
+        }finally{
+            ConnectionFactory.CloseConnection(con, stmt, rs);
+        }
+        return Produto;      
+    }
+    
+    public void addEstProd(int qtdAdd, int idProd){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int qtdAtual = 0;
+        
+        
+        try {
+            stmt = con.prepareStatement("SELECT * FROM produtos WHERE idProduto = ?");
+            stmt.setInt(1,idProd);
+            rs = stmt.executeQuery();
+            
+            while (rs.next()) {                
+                qtdAtual =rs.getInt(10);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível validar a quantidade atual do estoque - Contate o administrador do sistema -> "+ex);
         }
         
-    }  
+        qtdAdd = (qtdAdd + qtdAtual);
+        
+        try {
+            stmt = con.prepareStatement("UPDATE produtos SET Quantidade = ? WHERE idProduto = ?");
+            stmt.setInt(1, qtdAdd);
+            stmt.setInt(2, idProd);
+            stmt.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null, "Adicionado com sucesso!");
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível adicionar ao estoque - Contate o administrador do sistema -> "+ex);
+        }
+    }
 }

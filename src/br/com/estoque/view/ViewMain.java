@@ -5,16 +5,11 @@
  */
 package br.com.estoque.view;
 
-import br.com.estoque.connection.ConnectionFactory;
 import br.com.estoque.model.bean.Produto;
 import br.com.estoque.model.dao.ProdutoDAO;
-import java.sql.Connection;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.view.JasperViewer;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -40,6 +35,9 @@ public class ViewMain extends javax.swing.JFrame {
         readtableProdutos();
     }
     
+    ViewAddEstoqueProdutos JtAddProd = new ViewAddEstoqueProdutos();
+    ViewRemoveEstoqueProdutos JtRemProd = new ViewRemoveEstoqueProdutos();
+    
     public void readtableProdutos(){
         DefaultTableModel modeloProdInicial = (DefaultTableModel) JTProdutosInicial.getModel();
         modeloProdInicial.setNumRows(0);
@@ -57,7 +55,7 @@ public class ViewMain extends javax.swing.JFrame {
             
         }
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -94,24 +92,25 @@ public class ViewMain extends javax.swing.JFrame {
         MenuSair = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("Principal - AT Estoque");
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("br/com/estoque/view/Bundle"); // NOI18N
+        setTitle(bundle.getString("ViewMain.title")); // NOI18N
         setResizable(false);
 
-        btnCadEntPri.setText("Cadastrar Entrada");
+        btnCadEntPri.setText(bundle.getString("ViewMain.btnCadEntPri.text")); // NOI18N
         btnCadEntPri.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCadEntPriActionPerformed(evt);
             }
         });
 
-        btnCadSaiPri.setText("Cadastrar Saída");
+        btnCadSaiPri.setText(bundle.getString("ViewMain.btnCadSaiPri.text")); // NOI18N
         btnCadSaiPri.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCadSaiPriActionPerformed(evt);
             }
         });
 
-        btnConProPri.setText("Consultar Produto");
+        btnConProPri.setText(bundle.getString("ViewMain.btnConProPri.text")); // NOI18N
         btnConProPri.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnConProPriActionPerformed(evt);
@@ -123,7 +122,7 @@ public class ViewMain extends javax.swing.JFrame {
 
             },
             new String [] {
-                "IdProduto", "Produto", "Preço", "Quantidade", "Est. Mínimo"
+                "idProduto", "Produto", "Preço", "Quantidade", "Est. mínimo"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -136,25 +135,41 @@ public class ViewMain extends javax.swing.JFrame {
         });
         JTProdutosInicial.setSelectionBackground(new java.awt.Color(255, 153, 0));
         JTProdutosInicial.setShowVerticalLines(false);
+        JTProdutosInicial.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JTProdutosInicialMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(JTProdutosInicial);
         if (JTProdutosInicial.getColumnModel().getColumnCount() > 0) {
             JTProdutosInicial.getColumnModel().getColumn(0).setResizable(false);
+            JTProdutosInicial.getColumnModel().getColumn(1).setResizable(false);
         }
 
-        jButton1.setText("Configurações");
+        jButton1.setText(bundle.getString("ViewMain.jButton1.text")); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
 
+        txtPesquisaMain.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtPesquisaMainActionPerformed(evt);
+            }
+        });
         txtPesquisaMain.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtPesquisaMainKeyTyped(evt);
             }
         });
 
-        jButton2.setText("Buscar");
+        jButton2.setText(bundle.getString("ViewMain.jButton2.text")); // NOI18N
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -196,10 +211,10 @@ public class ViewMain extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        MenuCadastros.setText("Cadastros");
+        MenuCadastros.setText(bundle.getString("ViewMain.MenuCadastros.text")); // NOI18N
 
         jCadProdutos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/package.png"))); // NOI18N
-        jCadProdutos.setText("Produtos");
+        jCadProdutos.setText(bundle.getString("ViewMain.jCadProdutos.text")); // NOI18N
         jCadProdutos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCadProdutosActionPerformed(evt);
@@ -208,7 +223,7 @@ public class ViewMain extends javax.swing.JFrame {
         MenuCadastros.add(jCadProdutos);
 
         jCadUsu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/user.png"))); // NOI18N
-        jCadUsu.setText("Usuários");
+        jCadUsu.setText(bundle.getString("ViewMain.jCadUsu.text")); // NOI18N
         jCadUsu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCadUsuActionPerformed(evt);
@@ -217,7 +232,7 @@ public class ViewMain extends javax.swing.JFrame {
         MenuCadastros.add(jCadUsu);
 
         jCadCat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/tag_blue.png"))); // NOI18N
-        jCadCat.setText("Categorias");
+        jCadCat.setText(bundle.getString("ViewMain.jCadCat.text")); // NOI18N
         jCadCat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCadCatActionPerformed(evt);
@@ -226,7 +241,7 @@ public class ViewMain extends javax.swing.JFrame {
         MenuCadastros.add(jCadCat);
 
         jCadFor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/lorry.png"))); // NOI18N
-        jCadFor.setText("Fornecedores");
+        jCadFor.setText(bundle.getString("ViewMain.jCadFor.text")); // NOI18N
         jCadFor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCadForActionPerformed(evt);
@@ -236,10 +251,10 @@ public class ViewMain extends javax.swing.JFrame {
 
         MenuPrincipal.add(MenuCadastros);
 
-        MenuRelatorios.setText("Relatórios");
+        MenuRelatorios.setText(bundle.getString("ViewMain.MenuRelatorios.text")); // NOI18N
 
         jRelPro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/package.png"))); // NOI18N
-        jRelPro.setText("Produtos");
+        jRelPro.setText(bundle.getString("ViewMain.jRelPro.text")); // NOI18N
         jRelPro.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jRelProActionPerformed(evt);
@@ -248,27 +263,27 @@ public class ViewMain extends javax.swing.JFrame {
         MenuRelatorios.add(jRelPro);
 
         jRelUsu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/user.png"))); // NOI18N
-        jRelUsu.setText("Usuários");
+        jRelUsu.setText(bundle.getString("ViewMain.jRelUsu.text")); // NOI18N
         MenuRelatorios.add(jRelUsu);
 
         jRelCat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/tag_blue.png"))); // NOI18N
-        jRelCat.setText("Categorias");
+        jRelCat.setText(bundle.getString("ViewMain.jRelCat.text")); // NOI18N
         MenuRelatorios.add(jRelCat);
 
         jRelFor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/lorry.png"))); // NOI18N
-        jRelFor.setText("Fornecedores");
+        jRelFor.setText(bundle.getString("ViewMain.jRelFor.text")); // NOI18N
         MenuRelatorios.add(jRelFor);
 
         MenuPrincipal.add(MenuRelatorios);
 
-        jFerEti.setText("Ferramentas");
+        jFerEti.setText(bundle.getString("ViewMain.jFerEti.text")); // NOI18N
 
         jMenuItem9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/printer.png"))); // NOI18N
-        jMenuItem9.setText("Etiquetas");
+        jMenuItem9.setText(bundle.getString("ViewMain.jMenuItem9.text")); // NOI18N
         jFerEti.add(jMenuItem9);
 
         jFerBac.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/database_save.png"))); // NOI18N
-        jFerBac.setText("Backup");
+        jFerBac.setText(bundle.getString("ViewMain.jFerBac.text")); // NOI18N
         jFerBac.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jFerBacActionPerformed(evt);
@@ -277,7 +292,7 @@ public class ViewMain extends javax.swing.JFrame {
         jFerEti.add(jFerBac);
 
         jMenuConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/cog.png"))); // NOI18N
-        jMenuConfig.setText("Configurações");
+        jMenuConfig.setText(bundle.getString("ViewMain.jMenuConfig.text")); // NOI18N
         jMenuConfig.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuConfigActionPerformed(evt);
@@ -287,7 +302,7 @@ public class ViewMain extends javax.swing.JFrame {
 
         MenuPrincipal.add(jFerEti);
 
-        MenuSair.setText("Sair");
+        MenuSair.setText(bundle.getString("ViewMain.MenuSair.text")); // NOI18N
         MenuSair.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 MenuSairMouseClicked(evt);
@@ -323,17 +338,42 @@ public class ViewMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jCadUsuActionPerformed
 
     private void btnCadEntPriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadEntPriActionPerformed
-        // TODO add your handling code here:
+        if(JTProdutosInicial.getSelectedRow() != -1){
+            int index = JTProdutosInicial.getSelectedRow();
+            TableModel model = JTProdutosInicial.getModel();
+            
+            String idProd = model.getValueAt(index, 0).toString();
+            String descProd = model.getValueAt(index, 1).toString();
+            String qtdProd = model.getValueAt(index, 3).toString();
+            
+            JtAddProd.setVisible(true);
+            JtAddProd.lblIdProd.setText(idProd);
+            JtAddProd.lblIdProd.setVisible(false); // Escondendo o ID na JFrame ViewAddEstoqueProdutos
+            JtAddProd.lblNomeProd.setText(descProd);
+            JtAddProd.lblQtd.setText(qtdProd);
+
+        }else{
+            JOptionPane.showMessageDialog(null, "Por favor, selecione um produto!");
+        }
     }//GEN-LAST:event_btnCadEntPriActionPerformed
 
     private void btnCadSaiPriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadSaiPriActionPerformed
-        // TODO add your handling code here:   
-        
         if(JTProdutosInicial.getSelectedRow() != -1){
-            DefaultTableModel dtmProdutos = (DefaultTableModel) JTProdutosInicial.getModel();
-            dtmProdutos.removeRow(JTProdutosInicial.getSelectedRow());
+            int index = JTProdutosInicial.getSelectedRow();
+            TableModel model =JTProdutosInicial.getModel();
+            
+            String idProd = model.getValueAt(index, 0).toString();
+            String desProd = model.getValueAt(index, 1).toString();
+            String qtdProd = model.getValueAt(index,3).toString();
+                   
+            JtRemProd.setVisible(true);
+            JtRemProd.lblIdProd.setText(idProd);
+            JtRemProd.lblIdProd.setVisible(false);
+            JtRemProd.lblDescProd.setText(desProd);
+            JtRemProd.lblQtdatual.setText(qtdProd);
+            
         }else{
-            JOptionPane.showMessageDialog(null, "Selecione um produto na lista!");
+            JOptionPane.showMessageDialog(null, "Por favor, selecione um produto!");
         }
     }//GEN-LAST:event_btnCadSaiPriActionPerformed
 
@@ -391,6 +431,18 @@ public class ViewMain extends javax.swing.JFrame {
     private void txtPesquisaMainKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPesquisaMainKeyTyped
         
     }//GEN-LAST:event_txtPesquisaMainKeyTyped
+
+    private void txtPesquisaMainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPesquisaMainActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtPesquisaMainActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void JTProdutosInicialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTProdutosInicialMouseClicked
+
+    }//GEN-LAST:event_JTProdutosInicialMouseClicked
  
     /**
      * @param args the command line arguments
