@@ -6,23 +6,15 @@
 package br.com.estoque.view;
 
 import br.com.estoque.connection.ConnectionFactory;
-import br.com.estoque.model.bean.EmailRelatorios;
-import br.com.estoque.model.bean.Usuario;
+import br.com.estoque.model.bean.Produto;
+import br.com.estoque.model.dao.ProdutoDAO;
 import java.sql.Connection;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
-import org.apache.commons.mail.EmailException;
 
 /**
  *
@@ -34,7 +26,36 @@ public class ViewMain extends javax.swing.JFrame {
      * Creates new form ViewProduto
      */
     public ViewMain() {
-        initComponents();        
+        initComponents();  
+        
+        JTProdutosInicial.getTableHeader().getColumnModel().getColumn(0).setMaxWidth(0);
+        JTProdutosInicial.getTableHeader().getColumnModel().getColumn(0).setMinWidth(0);
+        JTProdutosInicial.getColumnModel().getColumn(0).setMaxWidth(0);
+        JTProdutosInicial.getColumnModel().getColumn(0).setMinWidth(0);
+        JTProdutosInicial.getColumnModel().getColumn(1).setPreferredWidth(200);
+        JTProdutosInicial.getColumnModel().getColumn(2).setPreferredWidth(40);
+        JTProdutosInicial.getColumnModel().getColumn(3).setPreferredWidth(40);
+        JTProdutosInicial.getColumnModel().getColumn(4).setPreferredWidth(40);
+        
+        readtableProdutos();
+    }
+    
+    public void readtableProdutos(){
+        DefaultTableModel modeloProdInicial = (DefaultTableModel) JTProdutosInicial.getModel();
+        modeloProdInicial.setNumRows(0);
+        ProdutoDAO dao = new ProdutoDAO();
+        
+        for(Produto p : dao.read()){
+            modeloProdInicial.addRow(new Object[]{
+                p.getIdProduto(),
+                p.getDescricao(),
+                p.getValorVenda(),
+                p.getQuantidade(),
+                p.getEstMinimo()
+            });
+            
+            
+        }
     }
 
     /**
@@ -51,7 +72,7 @@ public class ViewMain extends javax.swing.JFrame {
         btnCadSaiPri = new javax.swing.JButton();
         btnConProPri = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        JTProdutos = new javax.swing.JTable();
+        JTProdutosInicial = new javax.swing.JTable();
         jButton1 = new javax.swing.JButton();
         txtPesquisaMain = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
@@ -91,29 +112,45 @@ public class ViewMain extends javax.swing.JFrame {
         });
 
         btnConProPri.setText("Consultar Produto");
+        btnConProPri.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnConProPriActionPerformed(evt);
+            }
+        });
 
-        JTProdutos.setModel(new javax.swing.table.DefaultTableModel(
+        JTProdutosInicial.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Nome", "Preço"
+                "IdProduto", "Produto", "Preço", "Quantidade", "Est. Mínimo"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(JTProdutos);
+        JTProdutosInicial.setSelectionBackground(new java.awt.Color(255, 153, 0));
+        JTProdutosInicial.setShowVerticalLines(false);
+        jScrollPane1.setViewportView(JTProdutosInicial);
+        if (JTProdutosInicial.getColumnModel().getColumnCount() > 0) {
+            JTProdutosInicial.getColumnModel().getColumn(0).setResizable(false);
+        }
 
         jButton1.setText("Configurações");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        txtPesquisaMain.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtPesquisaMainKeyTyped(evt);
             }
         });
 
@@ -292,9 +329,9 @@ public class ViewMain extends javax.swing.JFrame {
     private void btnCadSaiPriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadSaiPriActionPerformed
         // TODO add your handling code here:   
         
-        if(JTProdutos.getSelectedRow() != -1){
-            DefaultTableModel dtmProdutos = (DefaultTableModel) JTProdutos.getModel();
-            dtmProdutos.removeRow(JTProdutos.getSelectedRow());
+        if(JTProdutosInicial.getSelectedRow() != -1){
+            DefaultTableModel dtmProdutos = (DefaultTableModel) JTProdutosInicial.getModel();
+            dtmProdutos.removeRow(JTProdutosInicial.getSelectedRow());
         }else{
             JOptionPane.showMessageDialog(null, "Selecione um produto na lista!");
         }
@@ -339,26 +376,22 @@ public class ViewMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jMenuConfigActionPerformed
 
     private void jRelProActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRelProActionPerformed
-        Connection conn = ConnectionFactory.getConnection();
-        String src= "Produtos.jasper";
-        
-        JasperPrint jasperPrint = null;
-        try {
-            jasperPrint = JasperFillManager.fillReport(src, null, conn);
-        } catch (JRException ex) {
-            JOptionPane.showMessageDialog(null, "Não foi possível gerar o relatório. - Erro: "+ex);
-        }
-        
-        JasperViewer view = new JasperViewer(jasperPrint, false);
-        view.setVisible(true);
-        
+        ViewRelProd relProd = new ViewRelProd();
+        relProd.setVisible(true);
     }//GEN-LAST:event_jRelProActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        EmailRelatorios email = new EmailRelatorios();
-        email.enviaEmail();
+      
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void btnConProPriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConProPriActionPerformed
+        
+    }//GEN-LAST:event_btnConProPriActionPerformed
+
+    private void txtPesquisaMainKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPesquisaMainKeyTyped
+        
+    }//GEN-LAST:event_txtPesquisaMainKeyTyped
+ 
     /**
      * @param args the command line arguments
      */
@@ -398,7 +431,7 @@ public class ViewMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable JTProdutos;
+    private javax.swing.JTable JTProdutosInicial;
     private javax.swing.JMenu MenuCadastros;
     private javax.swing.JMenuBar MenuPrincipal;
     private javax.swing.JMenu MenuRelatorios;
