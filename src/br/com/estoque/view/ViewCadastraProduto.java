@@ -29,6 +29,8 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -41,11 +43,54 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
      * @param user
      */
     public ViewCadastraProduto() {
-        initComponents();
+        initComponents();    
+        DefaultTableModel modeloProd = (DefaultTableModel) JTProdutos.getModel();
+        JTProdutos.setRowSorter(new TableRowSorter(modeloProd));
         populaComboBoxCategoria();
         populaComboBoxForn();
+        
+        //JTProdutos.getColumnModel().getColumn(0).setPreferredWidth(0);
+        JTProdutos.getColumnModel().getColumn(0).setMaxWidth(0);
+        JTProdutos.getColumnModel().getColumn(0).setMinWidth(0);
+        JTProdutos.getTableHeader().getColumnModel().getColumn(0).setMaxWidth(0);
+        JTProdutos.getTableHeader().getColumnModel().getColumn(0).setMinWidth(0);
+        JTProdutos.getColumnModel().getColumn(1).setPreferredWidth(180);
+        JTProdutos.getColumnModel().getColumn(2).setPreferredWidth(100);
+        JTProdutos.getColumnModel().getColumn(3).setPreferredWidth(50);
+        JTProdutos.getColumnModel().getColumn(4).setPreferredWidth(50);
+        JTProdutos.getColumnModel().getColumn(5).setPreferredWidth(50);
+        JTProdutos.getColumnModel().getColumn(6).setPreferredWidth(50);
+        JTProdutos.getColumnModel().getColumn(7).setPreferredWidth(50);
+        JTProdutos.getColumnModel().getColumn(8).setPreferredWidth(50);
+        JTProdutos.getColumnModel().getColumn(9).setPreferredWidth(100);
+        
+        readTableProdutos();
     }
-
+    
+    public void readTableProdutos(){
+        DefaultTableModel modeloProd = (DefaultTableModel) JTProdutos.getModel();
+        modeloProd.setNumRows(0);
+        ProdutoDAO dao = new ProdutoDAO();
+        
+        for(Produto p : dao.read()){
+            modeloProd.addRow(new Object[]{
+                p.getIdProduto(),                
+                p.getDescricao(),
+                p.getCodigoDeBarras(),
+                p.getValorCusto(),
+                p.getValorVenda(),
+                p.getEstMinimo(),
+                p.getQuantidade(),
+                p.getUnidadeDeMedida(),
+                p.getEstado(),
+                p.getImagem(),
+                p.getIdCategoria(),
+                p.getIdFornecedor()
+            });
+        }
+        
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -80,7 +125,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         lblImgProd = new javax.swing.JLabel();
         btnArquivoImg = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        JTProdutos = new javax.swing.JTable();
         btnSalvarProd = new javax.swing.JButton();
         btnCancelarProd = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -152,18 +197,42 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        JTProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "idProduto", "Descrição", "Cód Barras", "Valor de Custo", "Valor de Venda", "Estoque Mín.", "Quantidade", "Un Medida", "Estado", "Imagem", "Categoria", "Fornecedor"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        JTProdutos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                JTProdutosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(JTProdutos);
+        if (JTProdutos.getColumnModel().getColumnCount() > 0) {
+            JTProdutos.getColumnModel().getColumn(0).setResizable(false);
+            JTProdutos.getColumnModel().getColumn(1).setResizable(false);
+            JTProdutos.getColumnModel().getColumn(2).setResizable(false);
+            JTProdutos.getColumnModel().getColumn(3).setResizable(false);
+            JTProdutos.getColumnModel().getColumn(4).setResizable(false);
+            JTProdutos.getColumnModel().getColumn(5).setResizable(false);
+            JTProdutos.getColumnModel().getColumn(6).setResizable(false);
+            JTProdutos.getColumnModel().getColumn(7).setResizable(false);
+            JTProdutos.getColumnModel().getColumn(8).setResizable(false);
+            JTProdutos.getColumnModel().getColumn(9).setResizable(false);
+            JTProdutos.getColumnModel().getColumn(10).setResizable(false);
+            JTProdutos.getColumnModel().getColumn(11).setResizable(false);
+        }
 
         btnSalvarProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/íconeCad.fw.png"))); // NOI18N
         btnSalvarProd.setText("   Salvar");
@@ -193,6 +262,11 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
 
         btnExcluirProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/iconeCan.fw.png"))); // NOI18N
         btnExcluirProd.setText("Excluir");
+        btnExcluirProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExcluirProdActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -407,37 +481,43 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
           String valorCusto = txtValorCusto.getText();
           String valorCustoBanco = valorCusto.replace(",", ".");
           BigDecimal valorCustoBig = new BigDecimal(valorCustoBanco);
+          p.setValorCusto(valorCustoBig);
           
           String valorVenda = txtValorVenda.getText();
           String valorVendaBanco = valorVenda.replace(",", ".");
           BigDecimal valorVendaBig = new BigDecimal(valorVendaBanco);
-          
-          p.setValorCusto(valorCustoBig);
           p.setValorVenda(valorVendaBig);
+                    
           p.setUnidadeDeMedida((String) jcbUniMed.getSelectedItem());
           if(jcbEstado.isSelected()){
               p.setEstado(true);
           }else{
               p.setEstado(false);
           }
-          File file = new File(txtFile.getText());
-          p.setImagem(file.getName());
           
-          // Envia a imagem para pasta de imagens de produto.
-          String origemArquivo = txtFile.getText();
-          String destinoArquivo = "C:\\Users\\Rafael\\Documents\\NetBeansProjects\\Controle2\\src\\img";
-            try {
-                dao.CopyImg(origemArquivo, destinoArquivo);
-            } catch (IOException ex) {
-                Logger.getLogger(ViewCadastraProduto.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
+          if("".equals(txtFile.getText())){
+              txtFile.setText("Controle2\\src\\img\\imgNaoDisp.jpg");
+              p.setImagem("imgNaoDisp.jpg");
+          }else{
+            File file = new File(txtFile.getText());
+            p.setImagem(file.getName());
+            // Envia a imagem para pasta de imagens de produto.
+            String origemArquivo = txtFile.getText();
+            String destinoArquivo = "C:\\Users\\Rafael\\Documents\\NetBeansProjects\\Controle2\\src\\img";
+                try {
+                    dao.CopyImg(origemArquivo, destinoArquivo);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao copiar imagem - " + ex);
+                }
+          }
+ 
             // Data para enviar para o banco. Data de cadastro do produto.
             LocalDate dataCadProd = LocalDate.now();
             p.setDataCadastro(dataCadProd);
             
           dao.create(p);      
           limpaFormProdutos();
+          readTableProdutos();
       }  
         
        
@@ -480,6 +560,31 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jcbCategoriaActionPerformed
 
+    private void btnExcluirProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirProdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnExcluirProdActionPerformed
+
+    private void JTProdutosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTProdutosMouseClicked
+        if(JTProdutos.getSelectedRow() != -1){
+            txtCodProd.setText(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 2).toString());
+            txtDescProd.setText(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 1).toString());
+            txtEstMin.setText(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 5).toString());
+            txtQtd.setText(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 6).toString());
+            txtValorCusto.setText(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 3).toString());
+            txtValorVenda.setText(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 4).toString());
+            txtFile.setText(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 9).toString());
+            
+            // O código abaixo é para mostrar a imagem quando usuário clica em uma das ROWs do JTABLE de Produtos
+            String pathname = "C:\\Users\\Rafael\\Documents\\NetBeansProjects\\Controle2\\src\\img\\" + txtFile.getText();
+            File file = new File(pathname);
+            ImageIcon image = new ImageIcon(file.getPath());
+            txtFile.setEditable(false);
+            txtFile.setText(file.getPath());
+            lblImgProd.setIcon(new ImageIcon(image.getImage().getScaledInstance(lblImgProd.getWidth(),lblImgProd.getHeight(), Image.SCALE_DEFAULT)));
+
+        }
+    }//GEN-LAST:event_JTProdutosMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -515,6 +620,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable JTProdutos;
     private javax.swing.JButton btnAlterarProd;
     private javax.swing.JButton btnArquivoImg;
     private javax.swing.JButton btnCancelarProd;
@@ -531,7 +637,6 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JComboBox<Object> jcbCategoria;
     private javax.swing.JCheckBox jcbEstado;
     private javax.swing.JComboBox<String> jcbFornecedor;
