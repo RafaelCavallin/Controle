@@ -82,9 +82,10 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
                 p.getIdCategoria(),
                 p.getIdFornecedor()
             });
-        }
-        
+        }  
     }
+    
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -238,7 +239,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         });
 
         btnCancelarProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/iconeCan.fw.png"))); // NOI18N
-        btnCancelarProd.setText("     Cancelar");
+        btnCancelarProd.setText("     Limpar");
         btnCancelarProd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnCancelarProdActionPerformed(evt);
@@ -254,6 +255,11 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
 
         btnAlterarProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/atu.png"))); // NOI18N
         btnAlterarProd.setText("Alterar");
+        btnAlterarProd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAlterarProdActionPerformed(evt);
+            }
+        });
 
         btnExcluirProd.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/iconeCan.fw.png"))); // NOI18N
         btnExcluirProd.setText("Excluir");
@@ -549,6 +555,8 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
 
     private void btnCancelarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarProdActionPerformed
         limpaFormProdutos();
+        JTProdutos.getSelectionModel().clearSelection();
+        btnSalvarProd.setEnabled(true);
     }//GEN-LAST:event_btnCancelarProdActionPerformed
 
     private void jcbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcbCategoriaActionPerformed
@@ -556,10 +564,22 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_jcbCategoriaActionPerformed
 
     private void btnExcluirProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirProdActionPerformed
-        // TODO add your handling code here:
+        if(JTProdutos.getSelectedRow() != -1){
+            if(JOptionPane.showConfirmDialog(null, "Deseja excluir o registro?", "Confirmação de exclusão!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                ProdutoDAO dao = new ProdutoDAO();
+                int idProd = (int) JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 0);
+                dao.delete(idProd);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Selecione um produto para excluir!");
+        }
+        limpaFormProdutos();
+        readTableProdutos();
+        btnSalvarProd.setEnabled(true);
     }//GEN-LAST:event_btnExcluirProdActionPerformed
 
     private void JTProdutosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTProdutosMouseClicked
+        btnSalvarProd.setEnabled(false);
         if(JTProdutos.getSelectedRow() != -1){
             txtCodProd.setText(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 2).toString());
             txtDescProd.setText(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 1).toString());
@@ -576,9 +596,14 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
             txtFile.setEditable(false);
             txtFile.setText(file.getPath());
             lblImgProd.setIcon(new ImageIcon(image.getImage().getScaledInstance(lblImgProd.getWidth(),lblImgProd.getHeight(), Image.SCALE_DEFAULT)));
-
         }
     }//GEN-LAST:event_JTProdutosMouseClicked
+
+    private void btnAlterarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarProdActionPerformed
+        limpaFormProdutos();
+        JTProdutos.getSelectionModel().clearSelection();
+        btnSalvarProd.setEnabled(true);
+    }//GEN-LAST:event_btnAlterarProdActionPerformed
 
     /**
      * @param args the command line arguments

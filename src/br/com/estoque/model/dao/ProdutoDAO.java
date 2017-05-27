@@ -58,6 +58,22 @@ public class ProdutoDAO {
         } 
     }
     
+    public void delete(int idProd){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        
+        try {
+            stmt = con.prepareStatement("DELETE FROM produtos WHERE idProduto = ?");
+            stmt.setInt(1, idProd);
+            stmt.executeUpdate();
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao excluir!" +ex);
+        }finally{
+            ConnectionFactory.CloseConnection(con, stmt);
+        }
+    }
+    
     public List<Produto> read(){
         
         Connection con = ConnectionFactory.getConnection();
@@ -230,15 +246,49 @@ public class ProdutoDAO {
             JOptionPane.showMessageDialog(null, "Não foi possível validar a quantidade atual do estoque - Contate o administrador do sistema -> "+ex);
         }
         
-        qtdAdd = (qtdAdd + qtdAtual);
+        qtdAtual = (qtdAtual + qtdAdd);
         
         try {
             stmt = con.prepareStatement("UPDATE produtos SET Quantidade = ? WHERE idProduto = ?");
-            stmt.setInt(1, qtdAdd);
+            stmt.setInt(1, qtdAtual);
             stmt.setInt(2, idProd);
             stmt.executeUpdate();
             
             JOptionPane.showMessageDialog(null, "Adicionado com sucesso!");
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível adicionar ao estoque - Contate o administrador do sistema -> "+ex);
+        }
+    }
+    
+    public void removeEstProd(int qtdRemove, int idProd){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int qtdAtual = 0;
+        
+        try {
+            stmt = con.prepareStatement("SELECT * FROM produtos WHERE idProduto = ?");
+            stmt.setInt(1,idProd);
+            rs = stmt.executeQuery();
+            
+            while (rs.next()) {                
+                qtdAtual =rs.getInt(10);
+            }
+
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível validar a quantidade atual do estoque - Contate o administrador do sistema -> "+ex);
+        }
+        
+        qtdAtual = (qtdAtual - qtdRemove);
+        
+        try {
+            stmt = con.prepareStatement("UPDATE produtos SET Quantidade = ? WHERE idProduto = ?");
+            stmt.setInt(1, qtdAtual);
+            stmt.setInt(2, idProd);
+            stmt.executeUpdate();
+            
+            JOptionPane.showMessageDialog(null, "Removido com sucesso!");
 
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Não foi possível adicionar ao estoque - Contate o administrador do sistema -> "+ex);

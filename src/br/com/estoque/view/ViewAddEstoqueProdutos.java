@@ -197,6 +197,8 @@ public class ViewAddEstoqueProdutos extends javax.swing.JFrame {
         }else{
             JOptionPane.showMessageDialog(null, "O valor a ser adicionado deve ser maior que 0!");
         }
+        JsQtdAdd.setValue(0);
+        this.setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

@@ -5,6 +5,9 @@
  */
 package br.com.estoque.view;
 
+import br.com.estoque.model.dao.ProdutoDAO;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Rafael
@@ -34,11 +37,11 @@ public class ViewRemoveEstoqueProdutos extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
+        JsQtdRemove = new javax.swing.JSpinner();
         lblDescProd = new javax.swing.JLabel();
         lblQtdatual = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnRemoveEst = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Remove Estoque");
@@ -79,7 +82,7 @@ public class ViewRemoveEstoqueProdutos extends javax.swing.JFrame {
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
         jLabel4.setText("Remover:");
 
-        jSpinner1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        JsQtdRemove.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         lblDescProd.setFont(new java.awt.Font("Tahoma", 3, 20)); // NOI18N
 
@@ -102,7 +105,7 @@ public class ViewRemoveEstoqueProdutos extends javax.swing.JFrame {
                                     .addComponent(lblQtdatual, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(98, 98, 98)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(JsQtdRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel4))))
                         .addGap(0, 80, Short.MAX_VALUE)))
                 .addContainerGap())
@@ -120,13 +123,18 @@ public class ViewRemoveEstoqueProdutos extends javax.swing.JFrame {
                     .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JsQtdRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblQtdatual, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(31, 31, 31))
         );
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        jButton1.setText("Remover");
+        btnRemoveEst.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
+        btnRemoveEst.setText("Remover");
+        btnRemoveEst.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnRemoveEstActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -134,14 +142,14 @@ public class ViewRemoveEstoqueProdutos extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(97, 97, 97)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRemoveEst, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRemoveEst, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
@@ -166,6 +174,25 @@ public class ViewRemoveEstoqueProdutos extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnRemoveEstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveEstActionPerformed
+        int qtdRemove = Integer.parseInt(JsQtdRemove.getValue().toString());
+        int idProd = Integer.parseInt(lblIdProd.getText());
+        
+        if(qtdRemove > 0){
+            ProdutoDAO dao = new ProdutoDAO();
+            
+            try {
+                dao.removeEstProd(qtdRemove, idProd);
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao adicionar estoque - Contate o administrador " + ex);
+            }    
+        }else{
+            JOptionPane.showMessageDialog(null, "O valor a ser adicionado deve ser maior que 0!");
+        }
+        JsQtdRemove.setValue(0);
+        this.setVisible(false);
+    }//GEN-LAST:event_btnRemoveEstActionPerformed
 
     /**
      * @param args the command line arguments
@@ -203,7 +230,8 @@ public class ViewRemoveEstoqueProdutos extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JSpinner JsQtdRemove;
+    private javax.swing.JButton btnRemoveEst;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -211,7 +239,6 @@ public class ViewRemoveEstoqueProdutos extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     public javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JSpinner jSpinner1;
     public javax.swing.JLabel lblDescProd;
     public javax.swing.JLabel lblIdProd;
     public javax.swing.JLabel lblQtdatual;

@@ -5,11 +5,17 @@
  */
 package br.com.estoque.view;
 
+import br.com.estoque.connection.ConnectionFactory;
 import br.com.estoque.model.bean.Produto;
 import br.com.estoque.model.dao.ProdutoDAO;
+import java.sql.Connection;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -95,6 +101,17 @@ public class ViewMain extends javax.swing.JFrame {
         java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("br/com/estoque/view/Bundle"); // NOI18N
         setTitle(bundle.getString("ViewMain.title")); // NOI18N
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
+        });
+
+        jPanel1.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jPanel1FocusGained(evt);
+            }
+        });
 
         btnCadEntPri.setText(bundle.getString("ViewMain.btnCadEntPri.text")); // NOI18N
         btnCadEntPri.addActionListener(new java.awt.event.ActionListener() {
@@ -213,6 +230,7 @@ public class ViewMain extends javax.swing.JFrame {
 
         MenuCadastros.setText(bundle.getString("ViewMain.MenuCadastros.text")); // NOI18N
 
+        jCadProdutos.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
         jCadProdutos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/package.png"))); // NOI18N
         jCadProdutos.setText(bundle.getString("ViewMain.jCadProdutos.text")); // NOI18N
         jCadProdutos.addActionListener(new java.awt.event.ActionListener() {
@@ -222,6 +240,7 @@ public class ViewMain extends javax.swing.JFrame {
         });
         MenuCadastros.add(jCadProdutos);
 
+        jCadUsu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
         jCadUsu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/user.png"))); // NOI18N
         jCadUsu.setText(bundle.getString("ViewMain.jCadUsu.text")); // NOI18N
         jCadUsu.addActionListener(new java.awt.event.ActionListener() {
@@ -231,6 +250,7 @@ public class ViewMain extends javax.swing.JFrame {
         });
         MenuCadastros.add(jCadUsu);
 
+        jCadCat.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
         jCadCat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/tag_blue.png"))); // NOI18N
         jCadCat.setText(bundle.getString("ViewMain.jCadCat.text")); // NOI18N
         jCadCat.addActionListener(new java.awt.event.ActionListener() {
@@ -240,6 +260,7 @@ public class ViewMain extends javax.swing.JFrame {
         });
         MenuCadastros.add(jCadCat);
 
+        jCadFor.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
         jCadFor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/lorry.png"))); // NOI18N
         jCadFor.setText(bundle.getString("ViewMain.jCadFor.text")); // NOI18N
         jCadFor.addActionListener(new java.awt.event.ActionListener() {
@@ -253,6 +274,7 @@ public class ViewMain extends javax.swing.JFrame {
 
         MenuRelatorios.setText(bundle.getString("ViewMain.MenuRelatorios.text")); // NOI18N
 
+        jRelPro.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.SHIFT_MASK));
         jRelPro.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/package.png"))); // NOI18N
         jRelPro.setText(bundle.getString("ViewMain.jRelPro.text")); // NOI18N
         jRelPro.addActionListener(new java.awt.event.ActionListener() {
@@ -262,14 +284,32 @@ public class ViewMain extends javax.swing.JFrame {
         });
         MenuRelatorios.add(jRelPro);
 
+        jRelUsu.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.SHIFT_MASK));
         jRelUsu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/user.png"))); // NOI18N
         jRelUsu.setText(bundle.getString("ViewMain.jRelUsu.text")); // NOI18N
+        jRelUsu.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRelUsuMouseClicked(evt);
+            }
+        });
+        jRelUsu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRelUsuActionPerformed(evt);
+            }
+        });
         MenuRelatorios.add(jRelUsu);
 
+        jRelCat.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.SHIFT_MASK));
         jRelCat.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/tag_blue.png"))); // NOI18N
         jRelCat.setText(bundle.getString("ViewMain.jRelCat.text")); // NOI18N
+        jRelCat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRelCatActionPerformed(evt);
+            }
+        });
         MenuRelatorios.add(jRelCat);
 
+        jRelFor.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK));
         jRelFor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/lorry.png"))); // NOI18N
         jRelFor.setText(bundle.getString("ViewMain.jRelFor.text")); // NOI18N
         MenuRelatorios.add(jRelFor);
@@ -278,10 +318,12 @@ public class ViewMain extends javax.swing.JFrame {
 
         jFerEti.setText(bundle.getString("ViewMain.jFerEti.text")); // NOI18N
 
+        jMenuItem9.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
         jMenuItem9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/printer.png"))); // NOI18N
         jMenuItem9.setText(bundle.getString("ViewMain.jMenuItem9.text")); // NOI18N
         jFerEti.add(jMenuItem9);
 
+        jFerBac.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.ALT_MASK));
         jFerBac.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/database_save.png"))); // NOI18N
         jFerBac.setText(bundle.getString("ViewMain.jFerBac.text")); // NOI18N
         jFerBac.addActionListener(new java.awt.event.ActionListener() {
@@ -291,6 +333,7 @@ public class ViewMain extends javax.swing.JFrame {
         });
         jFerEti.add(jFerBac);
 
+        jMenuConfig.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.ALT_MASK));
         jMenuConfig.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/cog.png"))); // NOI18N
         jMenuConfig.setText(bundle.getString("ViewMain.jMenuConfig.text")); // NOI18N
         jMenuConfig.addActionListener(new java.awt.event.ActionListener() {
@@ -443,6 +486,52 @@ public class ViewMain extends javax.swing.JFrame {
     private void JTProdutosInicialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTProdutosInicialMouseClicked
 
     }//GEN-LAST:event_JTProdutosInicialMouseClicked
+
+    private void jPanel1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jPanel1FocusGained
+
+    }//GEN-LAST:event_jPanel1FocusGained
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+        readtableProdutos();
+    }//GEN-LAST:event_formWindowActivated
+
+    private void jRelUsuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRelUsuMouseClicked
+        
+    }//GEN-LAST:event_jRelUsuMouseClicked
+
+    private void jRelUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRelUsuActionPerformed
+        Connection conn = ConnectionFactory.getConnection();
+        String src = "Relatorios\\Usuarios\\RelatorioUsuariosTodos.jasper";
+        JasperPrint jasperPrint = null;
+        
+        try {
+            jasperPrint = JasperFillManager.fillReport(src, null, conn);
+        } catch (JRException ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível gerar o relatório. - Erro: "+ex);
+        }
+        JasperViewer view = new JasperViewer(jasperPrint, false);
+        view.setSize(1024, 800);
+        view.setZoomRatio((float) 0.85);
+        view.setTitle("Relatório Usuários");
+        view.setVisible(true);  
+    }//GEN-LAST:event_jRelUsuActionPerformed
+
+    private void jRelCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRelCatActionPerformed
+        Connection conn = ConnectionFactory.getConnection();
+        String src = "Relatorios\\Categorias\\RelatorioCategoriasTodas.jasper";
+        JasperPrint jasperPrint = null;
+        
+        try {
+            jasperPrint = JasperFillManager.fillReport(src, null, conn);
+        } catch (JRException ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível gerar o relatório. - Erro: "+ex);
+        }
+        JasperViewer view = new JasperViewer(jasperPrint, false);
+        view.setSize(1024, 800);
+        view.setZoomRatio((float) 0.85);
+        view.setTitle("Relatório Categorias");
+        view.setVisible(true); 
+    }//GEN-LAST:event_jRelCatActionPerformed
  
     /**
      * @param args the command line arguments
@@ -483,7 +572,7 @@ public class ViewMain extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTable JTProdutosInicial;
+    public javax.swing.JTable JTProdutosInicial;
     private javax.swing.JMenu MenuCadastros;
     private javax.swing.JMenuBar MenuPrincipal;
     private javax.swing.JMenu MenuRelatorios;
