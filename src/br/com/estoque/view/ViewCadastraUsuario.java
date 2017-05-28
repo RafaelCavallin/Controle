@@ -274,9 +274,11 @@ public class ViewCadastraUsuario extends javax.swing.JFrame {
         }
         
     readTableUsuarios();
+    btnCadUsuario.setEnabled(true);
     }//GEN-LAST:event_btnAtuaUsuarioActionPerformed
 
     private void JTUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTUsuariosMouseClicked
+        btnCadUsuario.setEnabled(false);
         if (JTUsuarios.getSelectedRow() != -1) {
 
             txtNomeUsuario.setText(JTUsuarios.getValueAt(JTUsuarios.getSelectedRow(), 1).toString());
@@ -294,7 +296,7 @@ public class ViewCadastraUsuario extends javax.swing.JFrame {
         txtSenhausuario.setText("");
         txtRepeteSenha.setText("");
         txtEmailUsuario.setText("");
-
+        btnCadUsuario.setEnabled(true);
     }//GEN-LAST:event_btnLimparUsuarioActionPerformed
 
     private void btnCadUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadUsuarioActionPerformed
@@ -346,6 +348,7 @@ public class ViewCadastraUsuario extends javax.swing.JFrame {
         txtRepeteSenha.setText("");
         txtEmailUsuario.setText("");
         readTableUsuarios();
+        btnCadUsuario.setEnabled(true);
     }//GEN-LAST:event_btnExcUsuarioActionPerformed
 
     /**

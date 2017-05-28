@@ -181,6 +181,7 @@ public class ViewCadastraCategoria extends javax.swing.JFrame {
 
     private void btnCanCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCanCatActionPerformed
         txtDesCat.setText("");
+        btnCadCat.setEnabled(true);
     }//GEN-LAST:event_btnCanCatActionPerformed
 
     private void btnExcluirCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirCatActionPerformed
@@ -197,6 +198,7 @@ public class ViewCadastraCategoria extends javax.swing.JFrame {
         }
         txtDesCat.setText("");
         readTableCategoria();
+        btnCadCat.setEnabled(true);
     }//GEN-LAST:event_btnExcluirCatActionPerformed
 
     private void btnCadCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadCatActionPerformed
@@ -228,9 +230,11 @@ public class ViewCadastraCategoria extends javax.swing.JFrame {
         }
         txtDesCat.setText("");
         readTableCategoria();
+        btnCadCat.setEnabled(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void JTCategoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTCategoriaMouseClicked
+        btnCadCat.setEnabled(false);
         if(JTCategoria.getSelectedRow() != -1){
             txtDesCat.setText(JTCategoria.getValueAt(JTCategoria.getSelectedRow(), 1).toString());
         }

@@ -6,6 +6,7 @@
 package br.com.estoque.view;
 
 import br.com.estoque.connection.ConnectionFactory;
+import br.com.estoque.model.bean.RelatoriosThread;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
@@ -150,74 +151,36 @@ public class ViewRelProd extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnProdutosAtivosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosAtivosActionPerformed
-        Connection conn = ConnectionFactory.getConnection();
         String src = "Relatorios\\Produtos\\RelatorioProdutosAtivos.jasper";
-        JasperPrint jasperPrint = null;
+        String titulo = "Relatório de Produtos Ativos";
         
-        try {
-            jasperPrint = JasperFillManager.fillReport(src, null, conn);
-        } catch (JRException ex) {
-            JOptionPane.showMessageDialog(null, "Não foi possível gerar o relatório. - Erro: "+ex);
-        }
-        JasperViewer view = new JasperViewer(jasperPrint, false);
-        view.setSize(1024, 800);
-        view.setZoomRatio((float) 0.85);
-        view.setTitle("Relatório de Produtos Ativos");
-        view.setVisible(true);  
+        RelatoriosThread rel = new RelatoriosThread(src, titulo);
+        rel.start();
     }//GEN-LAST:event_btnProdutosAtivosActionPerformed
 
     private void btnTodosProdutosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTodosProdutosActionPerformed
-        Connection conn = ConnectionFactory.getConnection();
         String src = "Relatorios\\Produtos\\RelatorioDeProdutos.jasper";
-        JasperPrint jasperPrint = null;
+        String titulo = "Relatório de Todos os Produtos";
         
-        try {
-            jasperPrint = JasperFillManager.fillReport(src, null, conn);
-        } catch (JRException ex) {
-            JOptionPane.showMessageDialog(null, "Não foi possível gerar o relatório. - Erro: "+ex);
-        }
-        
-        JasperViewer view = new JasperViewer(jasperPrint, false);
-        view.setSize(1024, 800);
-        view.setZoomRatio((float) 0.85);
-        view.setTitle("Relatório de Todos os Produtos");
-        view.setVisible(true);    
+        RelatoriosThread rel = new RelatoriosThread(src, titulo);
+        rel.start();
+   
     }//GEN-LAST:event_btnTodosProdutosActionPerformed
 
     private void btnProdutosCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosCategoriaActionPerformed
-        Connection conn = ConnectionFactory.getConnection();
         String src = "Relatorios\\Produtos\\RelatorioProdutosBaixoEstoque.jasper";
-        JasperPrint jasperPrint = null;
+        String titulo = "Relatório de Produtos Com Estoque Baixo";
         
-        try {
-            jasperPrint = JasperFillManager.fillReport(src, null, conn);
-        } catch (JRException ex) {
-            JOptionPane.showMessageDialog(null, "Não foi possível gerar o relatório. - Erro: "+ex);
-        }
-        
-        JasperViewer view = new JasperViewer(jasperPrint, false);
-        view.setSize(1024, 800);
-        view.setZoomRatio((float) 0.85);
-        view.setTitle("Relatório de Produtos Com Estoque Baixo");
-        view.setVisible(true); 
+        RelatoriosThread rel = new RelatoriosThread(src, titulo);
+        rel.start();
     }//GEN-LAST:event_btnProdutosCategoriaActionPerformed
 
     private void btnProdutosFaltasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProdutosFaltasActionPerformed
-        Connection conn = ConnectionFactory.getConnection();
         String src = "Relatorios\\Produtos\\RelatorioProdutosFaltas.jasper";
-        JasperPrint jasperPrint = null;
+        String titulo = "Relatório de Produtos em Falta";
         
-        try {
-            jasperPrint = JasperFillManager.fillReport(src, null, conn);
-        } catch (JRException ex) {
-            JOptionPane.showMessageDialog(null, "Não foi possível gerar o relatório. - Erro: "+ex);
-        }
-        
-        JasperViewer view = new JasperViewer(jasperPrint, false);
-        view.setSize(1024, 800);
-        view.setZoomRatio((float) 0.85);
-        view.setTitle("Relatório de Produtos Com Estoque Baixo");
-        view.setVisible(true); 
+        RelatoriosThread rel = new RelatoriosThread(src, titulo);
+        rel.start();
     }//GEN-LAST:event_btnProdutosFaltasActionPerformed
 
     /**

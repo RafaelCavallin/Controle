@@ -421,6 +421,7 @@ public final class ViewCadastraFornecedor extends javax.swing.JFrame {
     private void btnCanFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCanFornecedorActionPerformed
         limpaCamposForm();
         JTFornecedor.getSelectionModel().clearSelection();
+        btnCadFornecedor.setEnabled(true);
     }//GEN-LAST:event_btnCanFornecedorActionPerformed
 
     private void btnExcluirFornActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirFornActionPerformed
@@ -438,10 +439,11 @@ public final class ViewCadastraFornecedor extends javax.swing.JFrame {
         
         limpaCamposForm();
         readTableFornecedores();
-        
+        btnCadFornecedor.setEnabled(true);
     }//GEN-LAST:event_btnExcluirFornActionPerformed
 
     private void JTFornecedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTFornecedorMouseClicked
+        btnCadFornecedor.setEnabled(false);
         if(JTFornecedor.getSelectedRow() != -1){
             txtRazaoSocial.setText(JTFornecedor.getValueAt(JTFornecedor.getSelectedRow(), 1).toString());
             txtCNPJ.setText(JTFornecedor.getValueAt(JTFornecedor.getSelectedRow(), 2).toString());
@@ -485,6 +487,7 @@ public final class ViewCadastraFornecedor extends javax.swing.JFrame {
         }
         limpaCamposForm();
         readTableFornecedores();
+        btnCadFornecedor.setEnabled(true);
     }//GEN-LAST:event_btnAlterarFornActionPerformed
     
     private void JTFornecedorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_JTFornecedorFocusLost

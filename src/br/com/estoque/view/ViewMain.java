@@ -7,6 +7,8 @@ package br.com.estoque.view;
 
 import br.com.estoque.connection.ConnectionFactory;
 import br.com.estoque.model.bean.Produto;
+import br.com.estoque.model.bean.RelatoriosThread;
+import br.com.estoque.model.bean.TarefasAgendadas;
 import br.com.estoque.model.dao.ProdutoDAO;
 import java.sql.Connection;
 import javax.swing.JOptionPane;
@@ -16,6 +18,7 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
+import org.apache.commons.mail.EmailException;
 
 /**
  *
@@ -312,6 +315,11 @@ public class ViewMain extends javax.swing.JFrame {
         jRelFor.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.SHIFT_MASK));
         jRelFor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/lorry.png"))); // NOI18N
         jRelFor.setText(bundle.getString("ViewMain.jRelFor.text")); // NOI18N
+        jRelFor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRelForActionPerformed(evt);
+            }
+        });
         MenuRelatorios.add(jRelFor);
 
         MenuPrincipal.add(MenuRelatorios);
@@ -480,7 +488,15 @@ public class ViewMain extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPesquisaMainActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+     RelatorioPorEmail mail = new RelatorioPorEmail();
+     String src = "Relatorios\\teste.pdf";
+        try {
+            mail.sendAttachMail(src);
+        } catch (EmailException ex) {
+            System.out.println("Não" + ex);
+        }
+     
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void JTProdutosInicialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTProdutosInicialMouseClicked
@@ -517,21 +533,20 @@ public class ViewMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jRelUsuActionPerformed
 
     private void jRelCatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRelCatActionPerformed
-        Connection conn = ConnectionFactory.getConnection();
         String src = "Relatorios\\Categorias\\RelatorioCategoriasTodas.jasper";
-        JasperPrint jasperPrint = null;
+        String titulo = "Relatório Categorias";
         
-        try {
-            jasperPrint = JasperFillManager.fillReport(src, null, conn);
-        } catch (JRException ex) {
-            JOptionPane.showMessageDialog(null, "Não foi possível gerar o relatório. - Erro: "+ex);
-        }
-        JasperViewer view = new JasperViewer(jasperPrint, false);
-        view.setSize(1024, 800);
-        view.setZoomRatio((float) 0.85);
-        view.setTitle("Relatório Categorias");
-        view.setVisible(true); 
+        RelatoriosThread rel = new RelatoriosThread(src, titulo);
+        rel.start();
     }//GEN-LAST:event_jRelCatActionPerformed
+
+    private void jRelForActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRelForActionPerformed
+       String src = "Relatorios\\Fornecedores\\RelatorioFornecedores.jasper";
+       String titulo = "Relatório de Fornecedores";
+       
+       RelatoriosThread rel = new RelatoriosThread(src, titulo);
+       rel.start();
+    }//GEN-LAST:event_jRelForActionPerformed
  
     /**
      * @param args the command line arguments
