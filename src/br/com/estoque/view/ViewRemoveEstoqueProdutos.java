@@ -6,6 +6,7 @@
 package br.com.estoque.view;
 
 import br.com.estoque.model.dao.ProdutoDAO;
+import java.awt.Component;
 import javax.swing.JOptionPane;
 
 /**
@@ -104,9 +105,9 @@ public class ViewRemoveEstoqueProdutos extends javax.swing.JFrame {
                                     .addComponent(jLabel3)
                                     .addComponent(lblQtdatual, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(98, 98, 98)
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(JsQtdRemove, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4))))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(JsQtdRemove))))
                         .addGap(0, 80, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -178,18 +179,23 @@ public class ViewRemoveEstoqueProdutos extends javax.swing.JFrame {
     private void btnRemoveEstActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRemoveEstActionPerformed
         int qtdRemove = Integer.parseInt(JsQtdRemove.getValue().toString());
         int idProd = Integer.parseInt(lblIdProd.getText());
+        int qtdAtual = Integer.parseInt(lblQtdatual.getText());
         
-        if(qtdRemove > 0){
-            ProdutoDAO dao = new ProdutoDAO();
-            
-            try {
-                dao.removeEstProd(qtdRemove, idProd);
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(null, "Erro ao adicionar estoque - Contate o administrador " + ex);
-            }    
+        if(qtdAtual < qtdRemove){
+            JOptionPane.showMessageDialog(null , "Impossível remover essa quantidade!");
         }else{
-            JOptionPane.showMessageDialog(null, "O valor a ser adicionado deve ser maior que 0!");
+            if(qtdRemove > 0){
+                ProdutoDAO dao = new ProdutoDAO();
+                try {
+                    dao.removeEstProd(qtdRemove, idProd);
+                }catch (Exception ex) {
+                    JOptionPane.showMessageDialog(null, "Erro ao adicionar estoque - Contate o administrador " + ex);
+                }    
+            }else{
+                JOptionPane.showMessageDialog(null, "O valor a ser adicionado deve ser maior que 0!");
+            }
         }
+            
         JsQtdRemove.setValue(0);
         this.setVisible(false);
     }//GEN-LAST:event_btnRemoveEstActionPerformed

@@ -11,6 +11,7 @@ import br.com.estoque.model.bean.RelatoriosThread;
 import br.com.estoque.model.bean.TarefasAgendadas;
 import br.com.estoque.model.dao.ProdutoDAO;
 import java.sql.Connection;
+import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -46,6 +47,7 @@ public class ViewMain extends javax.swing.JFrame {
     
     ViewAddEstoqueProdutos JtAddProd = new ViewAddEstoqueProdutos();
     ViewRemoveEstoqueProdutos JtRemProd = new ViewRemoveEstoqueProdutos();
+    ViewProdutoConsultado JtProdCons = new ViewProdutoConsultado();
     
     public void readtableProdutos(){
         DefaultTableModel modeloProdInicial = (DefaultTableModel) JTProdutosInicial.getModel();
@@ -476,7 +478,30 @@ public class ViewMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnConProPriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConProPriActionPerformed
-        
+        if(JTProdutosInicial.getSelectedRow() != -1){
+            int idProd = (int) JTProdutosInicial.getValueAt(JTProdutosInicial.getSelectedRow(), 0); 
+            System.out.println(idProd);
+            Produto p = new Produto();
+            ProdutoDAO dao = new ProdutoDAO();
+            p = dao.readForId(idProd);
+            
+            JtProdCons.setVisible(true);
+            JtProdCons.lblDescCons.setText(p.getDescricao());
+            //JtProdCons.lblFornCons.setText(p.getIdFornecedor());
+            //JtProdCons.lblCatCons.setText(p.getIdCategoria());
+            JtProdCons.lblValorCustoCons.setText(String.valueOf(p.getValorCusto()));
+            JtProdCons.lblValorVendaCons.setText(String.valueOf(p.getValorVenda()));
+            JtProdCons.lblQtdCons.setText(String.valueOf(p.getQuantidade()));
+            //JtProdCons.lblDataCadCons.setText(LocalDate.parse(p.getDataCadastro()));
+            JtProdCons.lblUniMedCons.setText(p.getUnidadeDeMedida());
+            JtProdCons.lblEstMinCons.setText(String.valueOf(p.getEstMinimo()));
+            //JtProdCons.lblImgCons.set
+            
+            
+            
+        }else{
+            JOptionPane.showMessageDialog(null, "Por favor, selecione um produto!");
+        }
     }//GEN-LAST:event_btnConProPriActionPerformed
 
     private void txtPesquisaMainKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPesquisaMainKeyTyped
