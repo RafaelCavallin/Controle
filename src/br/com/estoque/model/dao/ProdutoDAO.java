@@ -2,7 +2,6 @@ package br.com.estoque.model.dao;
 
 import br.com.estoque.connection.ConnectionFactory;
 import br.com.estoque.model.bean.Produto;
-import static groovy.sql.Sql.resultSet;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -72,6 +71,51 @@ public class ProdutoDAO {
         }finally{
             ConnectionFactory.CloseConnection(con, stmt);
         }
+    }
+    
+    public Produto readForId(int id){
+        
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt =null;
+        ResultSet rs = null;
+        Produto p = new Produto();
+        
+        try {
+            stmt = con.prepareStatement("SELECT * FROM produtos WHERE idProduto = ?");
+            stmt.setInt(1, id);
+            rs = stmt.executeQuery();
+            
+            while(rs.next()){
+                p.setIdProduto(rs.getInt("idProduto"));
+                p.setIdUsuario(rs.getInt("idUsuario"));
+                p.setIdCategoria(rs.getInt("idCategoria"));
+                p.setIdFornecedor(rs.getInt("idFornecedor"));
+                p.setDescricao(rs.getString("Descricao"));
+                p.setCodigoDeBarras(rs.getString("CodigoDeBarras"));
+                p.setValorCusto(rs.getBigDecimal("ValorCusto"));
+                p.setValorVenda(rs.getBigDecimal("ValorVenda"));
+                p.setEstMinimo(rs.getInt("EstoqueMinimo"));
+                p.setQuantidade(rs.getInt("Quantidade"));
+                p.setUnidadeDeMedida(rs.getString("UnidMedida"));
+                p.setEstado(rs.getBoolean("Estado"));
+                // Convertendo a data do banco em LocalDate para o objeto
+                LocalDate dataCad = rs.getDate("DataCadastro").toLocalDate();
+                DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                
+                String dataEmString = dataCad.format(formatador);
+                
+                LocalDate dataCadConvertida= LocalDate.parse(dataEmString, formatador);
+                
+                p.setDataCadastro(dataCadConvertida);
+                p.setImagem(rs.getString("Imagem"));
+            }
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao retornar! - " +ex);
+        }finally{
+            ConnectionFactory.CloseConnection(con, stmt, rs);
+        }
+        return p;
     }
     
     public List<Produto> read(){
