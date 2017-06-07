@@ -11,7 +11,6 @@ import br.com.estoque.model.bean.RelatoriosThread;
 import br.com.estoque.model.bean.TarefasAgendadas;
 import br.com.estoque.model.dao.ProdutoDAO;
 import java.sql.Connection;
-import java.time.LocalDate;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -19,7 +18,6 @@ import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
-import org.apache.commons.mail.EmailException;
 
 /**
  *
@@ -43,6 +41,15 @@ public class ViewMain extends javax.swing.JFrame {
         JTProdutosInicial.getColumnModel().getColumn(4).setPreferredWidth(40);
         
         readtableProdutos();
+        
+        if(JOptionPane.showConfirmDialog(null, "Deseja enviar relatório diário?", "Relatório Diário", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+            TarefasAgendadas task = new TarefasAgendadas();
+            try {
+                task.enviaRelatorioDiario();
+            } catch (Exception ex) {
+                JOptionPane.showMessageDialog(null, "Erro ao enviar relatório diário - " + ex);
+            }
+        }
     }
     
     ViewAddEstoqueProdutos JtAddProd = new ViewAddEstoqueProdutos();
@@ -513,15 +520,7 @@ public class ViewMain extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPesquisaMainActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-     RelatorioPorEmail mail = new RelatorioPorEmail();
-     String src = "Relatorios\\teste.pdf";
-        try {
-            mail.sendAttachMail(src);
-        } catch (EmailException ex) {
-            System.out.println("Não" + ex);
-        }
-     
-        
+ 
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void JTProdutosInicialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTProdutosInicialMouseClicked
