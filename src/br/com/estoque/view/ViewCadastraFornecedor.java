@@ -257,6 +257,12 @@ public final class ViewCadastraFornecedor extends javax.swing.JFrame {
             }
         });
 
+        txtBuscaForn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscaFornActionPerformed(evt);
+            }
+        });
+
         jButton1.setText("Buscar");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -498,6 +504,10 @@ public final class ViewCadastraFornecedor extends javax.swing.JFrame {
         readTableFornForDesc(txtBuscaForn.getText());
         limpaCamposForm();
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void txtBuscaFornActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscaFornActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscaFornActionPerformed
 
     /**
      * @param args the command line arguments

@@ -1,4 +1,4 @@
-package br.com.estoque.view;
+package br.com.estoque.model.bean;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

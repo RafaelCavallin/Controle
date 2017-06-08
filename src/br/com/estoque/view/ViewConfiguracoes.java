@@ -5,6 +5,7 @@
  */
 package br.com.estoque.view;
 
+import br.com.estoque.model.bean.ConfigSistema;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -26,6 +27,14 @@ public class ViewConfiguracoes extends javax.swing.JFrame {
      */
     public ViewConfiguracoes() {
         initComponents();
+        ConfigSistema cam = new ConfigSistema();
+        try {
+            txtCaminhoBackup.setText(cam.caminhoConfig("1"));
+            txtCaminhoImagem.setText(cam.caminhoConfig("2"));
+            txtEmailRelDiario.setText(cam.caminhoConfig("3"));
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao carregar configurações. " + ex);
+        }
     }
 
     /**
@@ -262,24 +271,14 @@ public class ViewConfiguracoes extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Os campos não podem ficar em branco!");
         }else{
             if(JOptionPane.showConfirmDialog(null, "Deseja alterar os registros?", "Confirmação de exclusão!", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
-                FileWriter file;
-                try {
-                    file = new FileWriter("Config.txt");
-                    PrintWriter gravarCaminhos = new PrintWriter(file);
-
-                    gravarCaminhos.print("1" + caminhoImagens + " \r\n");
-                    gravarCaminhos.print("2" + caminhoBackup + " \r\n");
-                    gravarCaminhos.print("3" + EmailRelatoriosDiarios + " \r\n");
-                    file.close();             
-                } catch (IOException ex) {
-                    Logger.getLogger(ViewConfiguracoes.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                ConfigSistema setCam = new ConfigSistema();
+                setCam.gravarCaminho(caminhoBackup, caminhoImagens, EmailRelatoriosDiarios);
             }
         }  
     }//GEN-LAST:event_btnSalvarConfigActionPerformed
 
     private void btnSairConfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairConfActionPerformed
-        
+
     }//GEN-LAST:event_btnSairConfActionPerformed
 
     private void btnCaminhoBackupActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCaminhoBackupActionPerformed

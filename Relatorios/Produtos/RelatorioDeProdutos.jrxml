@@ -140,9 +140,6 @@ FROM
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="797" height="18" uuid="5f20f410-32fc-40c2-9431-f4b01e454a75"/>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="0" y="0" width="248" height="18" uuid="e687176c-ca8c-4304-83b3-190eb5f2641c"/>
-					<box>
-						<bottomPen lineWidth="1.0" lineColor="#999999"/>
-					</box>
 					<textElement>
 						<font size="14"/>
 					</textElement>
@@ -150,9 +147,6 @@ FROM
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="248" y="0" width="80" height="18" uuid="069965df-2241-47b1-992a-98c029b637c3"/>
-					<box>
-						<bottomPen lineWidth="1.0" lineColor="#999999"/>
-					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="14"/>
 					</textElement>
@@ -160,9 +154,6 @@ FROM
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="328" y="0" width="95" height="18" uuid="e8236132-e6a4-43f0-bf2e-87221e19643b"/>
-					<box>
-						<bottomPen lineWidth="1.0" lineColor="#999999"/>
-					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="14"/>
 					</textElement>
@@ -170,9 +161,6 @@ FROM
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="423" y="0" width="95" height="18" uuid="55b91ccb-f746-4d87-994f-769cd0e66a6c"/>
-					<box>
-						<bottomPen lineWidth="1.0" lineColor="#999999"/>
-					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="14"/>
 					</textElement>
@@ -180,9 +168,6 @@ FROM
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="518" y="0" width="95" height="18" uuid="8c6302b0-932c-4582-875d-8e7f66fb91eb"/>
-					<box>
-						<bottomPen lineWidth="1.0" lineColor="#999999"/>
-					</box>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font size="14"/>
 					</textElement>
@@ -190,9 +175,6 @@ FROM
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="613" y="0" width="179" height="18" uuid="dc2ffcbb-2459-4d99-9788-6a8b3fd7c51c"/>
-					<box>
-						<bottomPen lineWidth="1.0" lineColor="#999999"/>
-					</box>
 					<textElement textAlignment="Center">
 						<font size="14"/>
 					</textElement>

@@ -6,11 +6,20 @@
 package br.com.estoque.view;
 
 import br.com.estoque.connection.ConnectionFactory;
+import br.com.estoque.connection.Sessao;
+import br.com.estoque.model.bean.ConfigSistema;
 import br.com.estoque.model.bean.Produto;
 import br.com.estoque.model.bean.RelatoriosThread;
 import br.com.estoque.model.bean.TarefasAgendadas;
+import br.com.estoque.model.bean.Usuario;
 import br.com.estoque.model.dao.ProdutoDAO;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.sql.Connection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -68,9 +77,23 @@ public class ViewMain extends javax.swing.JFrame {
                 p.getValorVenda(),
                 p.getQuantidade(),
                 p.getEstMinimo()
-            });
-            
-            
+            }); 
+        }
+    }
+    
+    public void readtableProDesc(String busca){
+        DefaultTableModel modeloProdInicial = (DefaultTableModel) JTProdutosInicial.getModel();
+        modeloProdInicial.setNumRows(0);
+        ProdutoDAO dao = new ProdutoDAO();
+        
+        for(Produto p : dao.readProdForDesc(busca)){
+            modeloProdInicial.addRow(new Object[]{
+                p.getIdProduto(),
+                p.getDescricao(),
+                p.getValorVenda().scale(),
+                p.getQuantidade(),
+                p.getEstMinimo()
+            }); 
         }
     }
     
@@ -182,6 +205,7 @@ public class ViewMain extends javax.swing.JFrame {
             }
         });
 
+        txtPesquisaMain.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         txtPesquisaMain.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtPesquisaMainActionPerformed(evt);
@@ -393,8 +417,15 @@ public class ViewMain extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jCadUsuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCadUsuActionPerformed
-        ViewCadastraUsuario CadUser = new ViewCadastraUsuario();
-        CadUser.setVisible(true);
+        
+        String tipoUser = Sessao.getInstance().getTipo();
+        
+        if("Administrador".equals(tipoUser)){
+            ViewCadastraUsuario CadUser = new ViewCadastraUsuario();
+            CadUser.setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(null, "Apenas administradores podem acessar", "Acesso restrito", 1);
+        }
     }//GEN-LAST:event_jCadUsuActionPerformed
 
     private void btnCadEntPriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadEntPriActionPerformed
@@ -481,7 +512,8 @@ public class ViewMain extends javax.swing.JFrame {
     }//GEN-LAST:event_jRelProActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-      
+        ViewConfiguracoes conf = new ViewConfiguracoes();
+        conf.setVisible(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void btnConProPriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConProPriActionPerformed
@@ -516,11 +548,12 @@ public class ViewMain extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPesquisaMainKeyTyped
 
     private void txtPesquisaMainActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtPesquisaMainActionPerformed
-        // TODO add your handling code here:
+        
+        
     }//GEN-LAST:event_txtPesquisaMainActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
- 
+        readtableProDesc(txtPesquisaMain.getText());
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void JTProdutosInicialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTProdutosInicialMouseClicked

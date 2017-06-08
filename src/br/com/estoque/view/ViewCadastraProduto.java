@@ -7,6 +7,7 @@ package br.com.estoque.view;
 
 import br.com.estoque.connection.Sessao;
 import br.com.estoque.model.bean.Categoria;
+import br.com.estoque.model.bean.ConfigSistema;
 import br.com.estoque.model.bean.Fornecedor;
 import br.com.estoque.model.bean.Produto;
 import br.com.estoque.model.bean.Usuario;
@@ -503,15 +504,17 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
             File file = new File(txtFile.getText());
             p.setImagem(file.getName());
             // Envia a imagem para pasta de imagens de produto.
-            String origemArquivo = txtFile.getText();
-            String destinoArquivo = "C:\\Users\\Rafael\\Documents\\NetBeansProjects\\Controle2\\src\\img";
+            //String origemArquivo = txtFile.getText();
+            //String destinoArquivo = "C:\\Users\\Rafael\\Documents\\NetBeansProjects\\Controle2\\src\\img";
                 try {
+                    String origemArquivo = txtFile.getText();
+                    ConfigSistema cam = new ConfigSistema();
+                    String destinoArquivo = cam.caminhoConfig("2");
                     dao.CopyImg(origemArquivo, destinoArquivo);
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(null, "Erro ao copiar imagem - " + ex);
                 }
           }
- 
             // Data para enviar para o banco. Data de cadastro do produto.
             LocalDate dataCadProd = LocalDate.now();
             p.setDataCadastro(dataCadProd);

@@ -18,6 +18,10 @@ public class Sessao {
         return usuario;
     }
     
+    public String getTipo(){
+        return usuario.getTipo();
+    }
+    
     public static Sessao getInstance(){
         if(instance == null){
             instance = new Sessao();

@@ -235,7 +235,7 @@ public class ProdutoDAO {
         
         try {
             stmt = con.prepareStatement("SELECT * FROM produtos WHERE Descricao LIKE ?");
-            stmt.setString(0, "%"+ busca +"%");
+            stmt.setString(1, "%"+ busca +"%");
             rs = stmt.executeQuery();
             
             while (rs.next()) {                

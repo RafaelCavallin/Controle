@@ -5,12 +5,8 @@
  */
 package br.com.estoque.view;
 
-import br.com.estoque.model.bean.Produto;
 import br.com.estoque.model.bean.Usuario;
-import br.com.estoque.model.dao.ProdutoDAO;
 import br.com.estoque.model.dao.UsuarioDAO;
-import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Int;
-import java.awt.Component;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -26,6 +22,15 @@ public class ViewCadastraUsuario extends javax.swing.JFrame {
      */
     public ViewCadastraUsuario() {
         initComponents();
+        
+        JTUsuarios.getColumnModel().getColumn(0).setPreferredWidth(20);
+        JTUsuarios.getColumnModel().getColumn(1).setPreferredWidth(150);
+        JTUsuarios.getColumnModel().getColumn(2).setPreferredWidth(50);
+        JTUsuarios.getColumnModel().getColumn(3).setPreferredWidth(40);
+        JTUsuarios.getColumnModel().getColumn(4).setPreferredWidth(100);
+        
+        
+        
         DefaultTableModel modelo = (DefaultTableModel) JTUsuarios.getModel();
         JTUsuarios.setRowSorter(new TableRowSorter(modelo));
         readTableUsuarios();
@@ -251,27 +256,32 @@ public class ViewCadastraUsuario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAtuaUsuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtuaUsuarioActionPerformed
-        if(JOptionPane.showConfirmDialog(null, "Gostaria de alterar o registro?", "Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
-            if (JTUsuarios.getSelectedRow() != -1) {
-                Usuario u = new Usuario();
-                UsuarioDAO dao = new UsuarioDAO();
+        if ((txtLoginUsuario.getText().length() <= 0) || (txtNomeUsuario.getText().length() <= 0) || (txtSenhausuario.getText().length() <= 0) || (txtRepeteSenha.getText().length() <= 0) || (txtEmailUsuario.getText().length() <= 0)) {
+            JOptionPane.showMessageDialog(null, "Todos os campos devem ser preenchidos!");
+        }else{
+            if(JOptionPane.showConfirmDialog(null, "Gostaria de alterar o registro?", "Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                if (JTUsuarios.getSelectedRow() != -1) {
+                    Usuario u = new Usuario();
+                    UsuarioDAO dao = new UsuarioDAO();
 
-                u.setTipo((String) jcbTipoUsuario.getSelectedItem());
-                u.setNome(txtNomeUsuario.getText());
-                u.setLogin(txtLoginUsuario.getText());
-                u.setSenha(txtSenhausuario.getText());
-                u.setEmail(txtEmailUsuario.getText());
-                u.setIdUsuario((int) JTUsuarios.getValueAt(JTUsuarios.getSelectedRow(), 0));
-                dao.update(u);
+                    u.setTipo((String) jcbTipoUsuario.getSelectedItem());
+                    u.setNome(txtNomeUsuario.getText());
+                    u.setLogin(txtLoginUsuario.getText());
+                    u.setSenha(txtSenhausuario.getText());
+                    u.setEmail(txtEmailUsuario.getText());
+                    u.setIdUsuario((int) JTUsuarios.getValueAt(JTUsuarios.getSelectedRow(), 0));
+                    dao.update(u);
 
-                jcbTipoUsuario.setSelectedIndex(0);
-                txtNomeUsuario.setText("");
-                txtLoginUsuario.setText("");
-                txtSenhausuario.setText("");
-                txtRepeteSenha.setText("");
-                txtEmailUsuario.setText("");
+                    jcbTipoUsuario.setSelectedIndex(0);
+                    txtNomeUsuario.setText("");
+                    txtLoginUsuario.setText("");
+                    txtSenhausuario.setText("");
+                    txtRepeteSenha.setText("");
+                    txtEmailUsuario.setText("");
+                }
             }
         }
+        
         
     readTableUsuarios();
     btnCadUsuario.setEnabled(true);

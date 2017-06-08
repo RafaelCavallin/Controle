@@ -1,34 +1,30 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package br.com.estoque.model.bean;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import javax.swing.Timer;
+import br.com.estoque.connection.ConnectionFactory;
+import java.io.File;
+import java.sql.Connection;
+import javax.swing.JOptionPane;
+import net.sf.jasperreports.engine.*;
+import org.apache.commons.mail.EmailException;
 
-/**
- *
- * @author Rafael
- */
+
 public class TarefasAgendadas {
-
-    private Timer timer;
     
-    
-    public void task(){
-        ActionListener action = (ActionEvent e) -> {
-            LocalDateTime hora = LocalDateTime.now();
-            System.out.println("DEU" + hora);
-            
-        };   
-        this.timer = new Timer(50000, action);   
-        this.timer.start();   
-    }
-    
-    
+     public void enviaRelatorioDiario() throws EmailException{
+        Connection conn = ConnectionFactory.getConnection();
+        JasperPrint jasperPrint = null;
+        String src = "Relatorios\\Produtos\\RelatorioProdutosBaixoEstoque.jasper";
+               
+        try {
+             jasperPrint = JasperFillManager.fillReport(src, null, conn);
+             JasperExportManager.exportReportToPdfFile(jasperPrint,"RelatoriosPorEmail\\RelatorioDiario.pdf");
+             
+             File file = new File("RelatoriosPorEmail\\RelatorioDiario.pdf");
+             RelatorioPorEmail relEmail = new RelatorioPorEmail();
+             relEmail.sendAttachMail("RelatoriosPorEmail\\RelatorioDiario.pdf");
+ 
+        } catch (JRException ex) {
+            JOptionPane.showMessageDialog(null, "Não foi possível gerar o relatório. - Erro: "+ex);
+        }
+     }
 }

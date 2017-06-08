@@ -135,10 +135,6 @@ WHERE
 				<reportElement style="Row" mode="Opaque" x="0" y="0" width="797" height="18" uuid="120e1ff6-91da-43ad-93cf-579d55d748f2"/>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="0" y="0" width="243" height="18" uuid="84877051-9308-44f3-ba9b-b1be36fad7e8"/>
-					<box>
-						<bottomPen lineWidth="1.0" lineColor="#999999"/>
-						<rightPen lineWidth="1.0" lineColor="#999999"/>
-					</box>
 					<textElement>
 						<font size="14"/>
 					</textElement>
@@ -146,10 +142,6 @@ WHERE
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="243" y="0" width="95" height="18" uuid="4d588dff-beb0-4348-89ae-ee7dd603d491"/>
-					<box>
-						<bottomPen lineWidth="1.0" lineColor="#999999"/>
-						<rightPen lineWidth="1.0" lineColor="#999999"/>
-					</box>
 					<textElement textAlignment="Center">
 						<font size="14"/>
 					</textElement>
@@ -157,10 +149,6 @@ WHERE
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="338" y="0" width="95" height="18" uuid="08a74801-730a-4db4-bf0d-aa2332f84cfc"/>
-					<box>
-						<bottomPen lineWidth="1.0" lineColor="#999999"/>
-						<rightPen lineWidth="1.0" lineColor="#999999"/>
-					</box>
 					<textElement textAlignment="Center">
 						<font size="14"/>
 					</textElement>
@@ -168,10 +156,6 @@ WHERE
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="433" y="0" width="95" height="18" uuid="f1fd076d-c396-449d-8679-bf9e9eabd997"/>
-					<box>
-						<bottomPen lineWidth="1.0" lineColor="#999999"/>
-						<rightPen lineWidth="1.0" lineColor="#999999"/>
-					</box>
 					<textElement textAlignment="Center">
 						<font size="14"/>
 					</textElement>
@@ -179,10 +163,6 @@ WHERE
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="528" y="0" width="95" height="18" uuid="f9e18d70-8b03-4e3a-8a36-c993f93ec86b"/>
-					<box>
-						<bottomPen lineWidth="1.0" lineColor="#999999"/>
-						<rightPen lineWidth="1.0" lineColor="#999999"/>
-					</box>
 					<textElement textAlignment="Center">
 						<font size="14"/>
 					</textElement>
@@ -190,10 +170,6 @@ WHERE
 				</textField>
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" positionType="Float" x="623" y="0" width="174" height="18" uuid="34a0c4db-ad26-4118-bbfe-8970a8db4692"/>
-					<box>
-						<bottomPen lineWidth="1.0" lineColor="#999999"/>
-						<rightPen lineWidth="1.0" lineColor="#999999"/>
-					</box>
 					<textElement textAlignment="Center">
 						<font size="14"/>
 					</textElement>
