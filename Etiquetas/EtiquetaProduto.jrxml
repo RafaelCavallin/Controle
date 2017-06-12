@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="EtiquetaProduto" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ab473570-d35d-42d7-bc13-6d500675e835">
+	<property name="ireport.callouts" value="##Sat Jun 10 00:10:33 BRT 2017"/>
+	<property name="ireport.zoom" value="4.5949729863572255"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="id_prod" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     produtos.`Descricao` AS produtos_Descricao,
+     produtos.`CodigoDeBarras` AS produtos_CodigoDeBarras,
+     produtos.`ValorVenda` AS produtos_ValorVenda,
+     produtos.`UnidMedida` AS produtos_UnidMedida,
+     produtos.`idProduto` AS produtos_idProduto
+FROM
+     `produtos` produtos
+WHERE
+     produtos.`idProduto` = $P{id_prod}]]>
+	</queryString>
+	<field name="produtos_Descricao" class="java.lang.String"/>
+	<field name="produtos_CodigoDeBarras" class="java.lang.String"/>
+	<field name="produtos_ValorVenda" class="java.math.BigDecimal"/>
+	<field name="produtos_UnidMedida" class="java.lang.String"/>
+	<field name="produtos_idProduto" class="java.lang.Integer"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="802" splitType="Stretch">
+			<rectangle>
+				<reportElement mode="Opaque" x="2" y="2" width="117" height="68" uuid="872d9efa-7ae3-4bc9-ae38-e276295abaff"/>
+				<graphicElement>
+					<pen lineStyle="Dotted"/>
+				</graphicElement>
+			</rectangle>
+			<staticText>
+				<reportElement x="2" y="2" width="117" height="15" uuid="d643f82a-4120-4d86-aa01-95df2b6d0d0d"/>
+				<textElement textAlignment="Center">
+					<font isBold="true" isItalic="false" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[AudioTech Auto Center]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="3" y="18" width="116" height="9" uuid="e56c3326-e32a-4749-b4e7-92ed138fd87e"/>
+				<textElement verticalAlignment="Top">
+					<font size="5" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{produtos_Descricao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="3" y="27" width="18" height="10" uuid="20405102-19f9-4732-99f4-31ef832557a4"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<text><![CDATA[R$]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="21" y="27" width="62" height="10" uuid="a9416151-30f0-4cdd-8dad-8338a347abc7"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{produtos_ValorVenda}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="83" y="27" width="36" height="10" uuid="07ccd28c-fab1-49da-b588-01a66edb88ac"/>
+				<textElement>
+					<font size="6" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{produtos_UnidMedida}]]></textFieldExpression>
+			</textField>
+			<componentElement>
+				<reportElement x="3" y="38" width="116" height="32" uuid="ea241d4c-03e7-465e-8f8c-40ab7524fdfa"/>
+				<jr:Code39 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
+					<jr:codeExpression><![CDATA[$F{produtos_CodigoDeBarras}]]></jr:codeExpression>
+				</jr:Code39>
+			</componentElement>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

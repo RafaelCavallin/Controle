@@ -163,6 +163,27 @@ public class ProdutoDAO {
         return Produtos;
     }
     
+    public int readForDesc(String descricao){
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        int id = 0;
+        
+        try {
+            stmt = con.prepareCall("SELECT * FROM produtos WHERE Descricao = ?");
+            stmt.setString(1, descricao);
+            rs = stmt.executeQuery();
+                
+            while (rs.next()) {                
+                id = rs.getInt("idProduto");
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao retornar ID do produto ao procurar por descrição! - " + ex);
+        }
+        
+        return id;
+    }
+    
     public void update(Produto p){
         
         Connection con = ConnectionFactory.getConnection();
