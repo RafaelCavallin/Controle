@@ -190,8 +190,7 @@ public class ProdutoDAO {
         PreparedStatement stmt = null;
         
         try {
-            stmt = con.prepareStatement("INSERT INTO produtos (idUsuario, idCategoria, IdFornecedor, Descricao, CadigoDeBarras, ValorCusto, ValorVenda, EstoqueMinimo, Quantidade, UnidMedida, Estado, DataCadastro, Imagem) "
-                    + "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)");
+            stmt = con.prepareStatement("UPDATE produtos SET idUsuario = ?, idCategoria = ?, IdFornecedor = ?, Descricao = ?, CodigoDeBarras = ?, ValorCusto = ?, ValorVenda = ?, EstoqueMinimo = ?, Quantidade = ?, UnidMedida = ?, Estado = ?, DataCadastro = ?, Imagem = ? WHERE idProduto = ? ");
             stmt.setInt(1, p.getIdUsuario());
             stmt.setInt(2, p.getIdCategoria());
             stmt.setInt(3, p.getIdFornecedor());
@@ -205,6 +204,7 @@ public class ProdutoDAO {
             stmt.setBoolean(11, p.getEstado());
             stmt.setDate(12, Date.valueOf(p.getDataCadastro()));
             stmt.setString(13, p.getImagem());
+            stmt.setInt(14, p.getIdProduto());
             
             stmt.executeUpdate();
             
