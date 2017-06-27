@@ -1,5 +1,6 @@
 package br.com.estoque.model.bean;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import org.apache.commons.mail.DefaultAuthenticator;
@@ -12,13 +13,19 @@ import org.apache.commons.mail.SimpleEmail;
 public class RelatorioPorEmail {
     
     public String from = "rafael.cavallin89@gmail.com";
-    public String to = "rafael_cavallin@hotmail.com";
+    public String to = null;
     public String senhaMail = "sistemasulbra";
     
     LocalDate hoje = LocalDate.now();
-            DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     
-    public void sendSimplemail() {        
+    public RelatorioPorEmail() throws IOException{
+        ConfigSistema cam = new ConfigSistema();
+        this.to = cam.caminhoConfig("3");
+    }
+
+    public void sendSimplemail() throws IOException {  
+        
         Email email = new SimpleEmail();
  
         try {
@@ -30,7 +37,7 @@ public class RelatorioPorEmail {
             email.addTo(to, "Rafael Cavallin");
             email.setFrom(from , "Sistema Estoque");
             email.setSubject("Relatório Diário - " + hoje.format(formato));
-            email.setMsg("Relatório diário do seu estoque");
+            email.setMsg("Relatório diário do seu estoque.");
 
             email.send();
         } catch (EmailException e) {
@@ -57,7 +64,7 @@ public class RelatorioPorEmail {
             email.addTo(to, "Rafael Cavallin");
             email.setFrom(from, "Sistema Estoque");
             email.setSubject("Relatório Diário - " + hoje.format(formato));
-            email.setMsg("Relatório diário do seu estoque");
+            email.setMsg("Relatório diário do seu estoque.");
             
             email.send();
         } catch (EmailException e) {

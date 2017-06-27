@@ -5,7 +5,9 @@ import br.com.estoque.model.bean.Categoria;
 import java.net.ConnectException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
 
 public class CategoriaDAO {
@@ -111,4 +113,28 @@ public class CategoriaDAO {
             ConnectionFactory.CloseConnection(con, stmt);
         }
     } 
+    
+    public HashMap listCat(){
+        
+        Map<String,String> list = new HashMap<>();
+        
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            stmt = con.prepareStatement("SELECT * FROM categorias");
+            rs = stmt.executeQuery();
+            
+            while (rs.next()) {                
+                list.put(Integer.toString(rs.getInt("idCategoria")), rs.getString("Descricao"));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao retornar!" +ex);
+        }finally{
+            ConnectionFactory.CloseConnection(con, stmt, rs);
+        } 
+        
+        return (HashMap) list;
+    }
 }

@@ -6,6 +6,7 @@
 package br.com.estoque.view;
 
 import br.com.estoque.connection.ConnectionFactory;
+import br.com.estoque.model.bean.EtiquetaThread;
 import br.com.estoque.model.bean.Produto;
 import br.com.estoque.model.dao.ProdutoDAO;
 import java.sql.Connection;
@@ -13,6 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.PrintRequestAttributeSet;
+import javax.print.attribute.standard.Copies;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -154,26 +158,11 @@ public class GerarEtiqueta extends javax.swing.JFrame {
        String produto = (String) jcbEtiqProd.getSelectedItem();
        ProdutoDAO dao = new ProdutoDAO();
        int idProd = dao.readForDesc(produto);
-       
        String src = "Etiquetas\\EtiquetaProduto.jasper";
        
-       Connection conn = ConnectionFactory.getConnection();
-       JasperPrint jasperPrint = null;
-       Map par = new HashMap();
-       par.put("id_prod", idProd);
-        
-       try {
-           jasperPrint = JasperFillManager.fillReport(src, par, conn);
-            //jasperPrint = JasperFillManager.fillReport(src, par, conn);
-        } catch (JRException ex) {
-            JOptionPane.showMessageDialog(null, "Não foi possível gerar o relatório. - Erro: "+ex);
-        }
+        EtiquetaThread impEti = new EtiquetaThread(src, idProd, qtd);
+       impEti.start();
        
-       JasperViewer view = new JasperViewer(jasperPrint, false);
-        view.setSize(1024, 800);
-        view.setZoomRatio((float) 0.85);
-        view.setTitle("Teste");
-        view.setVisible(true); 
        
     }//GEN-LAST:event_btnGerarEtiqActionPerformed
 

@@ -22,6 +22,10 @@ public class Sessao {
         return usuario.getTipo();
     }
     
+    public int getIdUser(){
+        return usuario.getIdUsuario();
+    }
+    
     public static Sessao getInstance(){
         if(instance == null){
             instance = new Sessao();

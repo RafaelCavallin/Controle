@@ -7,19 +7,11 @@ package br.com.estoque.view;
 
 import br.com.estoque.connection.ConnectionFactory;
 import br.com.estoque.connection.Sessao;
-import br.com.estoque.model.bean.ConfigSistema;
 import br.com.estoque.model.bean.Produto;
 import br.com.estoque.model.bean.RelatoriosThread;
 import br.com.estoque.model.bean.TarefasAgendadas;
-import br.com.estoque.model.bean.Usuario;
 import br.com.estoque.model.dao.ProdutoDAO;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.sql.Connection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
@@ -90,7 +82,7 @@ public class ViewMain extends javax.swing.JFrame {
             modeloProdInicial.addRow(new Object[]{
                 p.getIdProduto(),
                 p.getDescricao(),
-                p.getValorVenda().scale(),
+                p.getValorVenda(),
                 p.getQuantidade(),
                 p.getEstMinimo()
             }); 
@@ -112,7 +104,7 @@ public class ViewMain extends javax.swing.JFrame {
         btnConProPri = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         JTProdutosInicial = new javax.swing.JTable();
-        jButton1 = new javax.swing.JButton();
+        btnGerarEtiq = new javax.swing.JButton();
         txtPesquisaMain = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
         MenuPrincipal = new javax.swing.JMenuBar();
@@ -195,13 +187,18 @@ public class ViewMain extends javax.swing.JFrame {
         jScrollPane1.setViewportView(JTProdutosInicial);
         if (JTProdutosInicial.getColumnModel().getColumnCount() > 0) {
             JTProdutosInicial.getColumnModel().getColumn(0).setResizable(false);
+            JTProdutosInicial.getColumnModel().getColumn(0).setHeaderValue(bundle.getString("ViewMain.JTProdutosInicial.columnModel.title0")); // NOI18N
             JTProdutosInicial.getColumnModel().getColumn(1).setResizable(false);
+            JTProdutosInicial.getColumnModel().getColumn(1).setHeaderValue(bundle.getString("ViewMain.JTProdutosInicial.columnModel.title1")); // NOI18N
+            JTProdutosInicial.getColumnModel().getColumn(2).setHeaderValue(bundle.getString("ViewMain.JTProdutosInicial.columnModel.title2")); // NOI18N
+            JTProdutosInicial.getColumnModel().getColumn(3).setHeaderValue(bundle.getString("ViewMain.JTProdutosInicial.columnModel.title3")); // NOI18N
+            JTProdutosInicial.getColumnModel().getColumn(4).setHeaderValue(bundle.getString("ViewMain.JTProdutosInicial.columnModel.title4")); // NOI18N
         }
 
-        jButton1.setText(bundle.getString("ViewMain.jButton1.text")); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnGerarEtiq.setText(bundle.getString("ViewMain.btnGerarEtiq.text")); // NOI18N
+        btnGerarEtiq.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnGerarEtiqActionPerformed(evt);
             }
         });
 
@@ -239,7 +236,7 @@ public class ViewMain extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addComponent(btnConProPri, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(btnGerarEtiq, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(txtPesquisaMain, javax.swing.GroupLayout.PREFERRED_SIZE, 516, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -251,7 +248,7 @@ public class ViewMain extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnGerarEtiq, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCadEntPri, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCadSaiPri, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnConProPri, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -362,6 +359,11 @@ public class ViewMain extends javax.swing.JFrame {
         jMenuItem9.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.ALT_MASK));
         jMenuItem9.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/com/estoque/icones/printer.png"))); // NOI18N
         jMenuItem9.setText(bundle.getString("ViewMain.jMenuItem9.text")); // NOI18N
+        jMenuItem9.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem9ActionPerformed(evt);
+            }
+        });
         jFerEti.add(jMenuItem9);
 
         jFerBac.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.ALT_MASK));
@@ -511,15 +513,14 @@ public class ViewMain extends javax.swing.JFrame {
         relProd.setVisible(true);
     }//GEN-LAST:event_jRelProActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        ViewConfiguracoes conf = new ViewConfiguracoes();
-        conf.setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnGerarEtiqActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarEtiqActionPerformed
+        GerarEtiqueta ge = new GerarEtiqueta();
+        ge.setVisible(true);
+    }//GEN-LAST:event_btnGerarEtiqActionPerformed
 
     private void btnConProPriActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConProPriActionPerformed
         if(JTProdutosInicial.getSelectedRow() != -1){
             int idProd = (int) JTProdutosInicial.getValueAt(JTProdutosInicial.getSelectedRow(), 0); 
-            System.out.println(idProd);
             Produto p = new Produto();
             ProdutoDAO dao = new ProdutoDAO();
             p = dao.readForId(idProd);
@@ -553,7 +554,13 @@ public class ViewMain extends javax.swing.JFrame {
     }//GEN-LAST:event_txtPesquisaMainActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        readtableProDesc(txtPesquisaMain.getText());
+        
+        if("".equals(txtPesquisaMain.getText())){
+            readtableProdutos();
+        }else{
+            readtableProDesc(txtPesquisaMain.getText());
+        }
+        
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void JTProdutosInicialMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTProdutosInicialMouseClicked
@@ -604,6 +611,11 @@ public class ViewMain extends javax.swing.JFrame {
        RelatoriosThread rel = new RelatoriosThread(src, titulo);
        rel.start();
     }//GEN-LAST:event_jRelForActionPerformed
+
+    private void jMenuItem9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem9ActionPerformed
+        GerarEtiqueta ge = new GerarEtiqueta();
+        ge.setVisible(true);
+    }//GEN-LAST:event_jMenuItem9ActionPerformed
  
     /**
      * @param args the command line arguments
@@ -652,7 +664,7 @@ public class ViewMain extends javax.swing.JFrame {
     private javax.swing.JButton btnCadEntPri;
     private javax.swing.JButton btnCadSaiPri;
     private javax.swing.JButton btnConProPri;
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton btnGerarEtiq;
     private javax.swing.JButton jButton2;
     private javax.swing.JMenuItem jCadCat;
     private javax.swing.JMenuItem jCadFor;

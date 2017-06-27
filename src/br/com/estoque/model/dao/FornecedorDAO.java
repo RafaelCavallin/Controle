@@ -7,7 +7,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.swing.JOptionPane;
 
 
@@ -180,5 +182,28 @@ public class FornecedorDAO {
             ConnectionFactory.CloseConnection(con, stmt, rs);
         } 
         return Fornecedores;
+    }
+    
+    public HashMap listFor(){
+        
+        Map<String,String> list = new HashMap<>();
+        
+        Connection con = ConnectionFactory.getConnection();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        
+        try {
+            stmt = con.prepareStatement("SELECT * FROM fornecedores");
+            rs = stmt.executeQuery();
+            
+            while (rs.next()) {                
+                list.put(Integer.toString(rs.getInt("idFornecedor")), rs.getString("RazaSocial"));
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao retornar!" +ex);
+        }finally{
+            ConnectionFactory.CloseConnection(con, stmt, rs);
+        } 
+        return (HashMap) list;
     }
 }

@@ -20,7 +20,10 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -440,21 +443,23 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
     
     public void populaComboBoxCategoria(){     
         CategoriaDAO dao = new CategoriaDAO();
-        List<Categoria> Categorias = new ArrayList<>();
-        Categorias = dao.read();
-        
-       for (Categoria c : Categorias) {
-           jcbCategoria.addItem(c.getDescricao());
-       }
+        Map<String,String> list = new HashMap<>();
+        list = dao.listCat();
+        Iterator it = list.entrySet().iterator();
+        while (it.hasNext()){
+            Map.Entry pairs = (Map.Entry)it.next();
+            jcbCategoria.addItem(pairs);
+        }
     }
     
     public void populaComboBoxForn(){
         FornecedorDAO dao = new FornecedorDAO();
-        List<Fornecedor> Fornecedor = new ArrayList<>();
-        Fornecedor = dao.read();
-        
-        for(Fornecedor f : Fornecedor){
-            jcbFornecedor.addItem(f.getRazaoSocial());
+        Map<String,String> list = new HashMap<>();
+        list = dao.listFor();
+        Iterator it = list.entrySet().iterator();
+        while (it.hasNext()){
+            Map.Entry pairs = (Map.Entry)it.next();
+            jcbFornecedor.addItem(pairs);
         }
     }
     
@@ -592,6 +597,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
             txtValorVenda.setText(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 4).toString());
             txtFile.setText(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 9).toString());
             
+            
             // O código abaixo é para mostrar a imagem quando usuário clica em uma das ROWs do JTABLE de Produtos
             String pathname = "C:\\Users\\Rafael\\Documents\\NetBeansProjects\\Controle2\\src\\img\\" + txtFile.getText();
             File file = new File(pathname);
@@ -603,9 +609,64 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
     }//GEN-LAST:event_JTProdutosMouseClicked
 
     private void btnAlterarProdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAlterarProdActionPerformed
+        if(JTProdutos.getSelectedRow() != -1){
+            if(JOptionPane.showConfirmDialog(null, "Gostaria de alterar o registro?", "Confirmação", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE) == JOptionPane.YES_OPTION){
+                Produto p = new Produto();
+                ProdutoDAO dao = new ProdutoDAO();
+                
+                
+                p.setIdProduto((int) JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 0));
+                
+                Sessao sessao = Sessao.getInstance();
+                p.setIdUsuario(sessao.getIdUser());
+                
+                CategoriaDAO catDAO = new CategoriaDAO();
+                p.setIdCategoria(catDAO.readForDesc((String) jcbCategoria.getSelectedItem()));
+                
+                FornecedorDAO forDAO = new FornecedorDAO();
+                p.setIdFornecedor(forDAO.readIdForDesc((String) jcbFornecedor.getSelectedItem()));
+                
+                p.setDescricao(txtDescProd.getText());
+                p.setCodigoDeBarras(txtCodProd.getText());
+                
+                BigDecimal ValorCusto = new BigDecimal(txtValorCusto.getText());
+                p.setValorCusto(ValorCusto);
+                
+                BigDecimal ValorVenda = new BigDecimal(txtValorVenda.getText());
+                p.setValorVenda(ValorVenda);
+                
+                int estMin = Integer.parseUnsignedInt(txtEstMin.getText());
+                p.setEstMinimo(estMin);
+                
+                int qtdProd = Integer.parseInt(txtQtd.getText());
+                p.setQuantidade(qtdProd);
+                
+                
+                p.setUnidadeDeMedida((String) jcbUniMed.getSelectedItem());
+                
+                if(jcbEstado.isSelected()){
+                     p.setEstado(true);
+                }else{
+                     p.setEstado(false);
+                }
+                
+                Produto prod = dao.readForId((int) JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 0));
+                p.setDataCadastro(prod.getDataCadastro());
+                
+                String camImagemComp = txtFile.getText();
+                String camImagem = camImagemComp.replace("C:\\Users\\Rafael\\Documents\\NetBeansProjects\\Controle2\\src\\img\\", "");     
+                p.setImagem(camImagem);
+                
+                
+                dao.update(p);
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Selecione um registro para alterar!");
+        }
         limpaFormProdutos();
         JTProdutos.getSelectionModel().clearSelection();
         btnSalvarProd.setEnabled(true);
+        readTableProdutos();
     }//GEN-LAST:event_btnAlterarProdActionPerformed
 
     /**
@@ -662,7 +723,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JComboBox<Object> jcbCategoria;
     private javax.swing.JCheckBox jcbEstado;
-    private javax.swing.JComboBox<String> jcbFornecedor;
+    private javax.swing.JComboBox<Object> jcbFornecedor;
     private javax.swing.JComboBox<String> jcbUniMed;
     private javax.swing.JLabel lblCatProd;
     private javax.swing.JLabel lblCodProd;
