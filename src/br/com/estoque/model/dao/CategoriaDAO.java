@@ -116,7 +116,7 @@ public class CategoriaDAO {
     
     public HashMap listCat(){
         
-        Map<String,String> list = new HashMap<>();
+        Map<Integer,String> list = new HashMap<>();
         
         Connection con = ConnectionFactory.getConnection();
         PreparedStatement stmt = null;
@@ -127,7 +127,7 @@ public class CategoriaDAO {
             rs = stmt.executeQuery();
             
             while (rs.next()) {                
-                list.put(Integer.toString(rs.getInt("idCategoria")), rs.getString("Descricao"));
+                list.put(rs.getInt("idCategoria"), rs.getString("Descricao"));
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Erro ao retornar!" +ex);

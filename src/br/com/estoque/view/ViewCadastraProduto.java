@@ -447,8 +447,8 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         list = dao.listCat();
         Iterator it = list.entrySet().iterator();
         while (it.hasNext()){
-            Map.Entry pairs = (Map.Entry)it.next();
-            jcbCategoria.addItem(pairs);
+            Map.Entry pairs = (Map.Entry) it.next();
+            jcbCategoria.addItem(pairs.getValue());
         }
     }
     
@@ -459,7 +459,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         Iterator it = list.entrySet().iterator();
         while (it.hasNext()){
             Map.Entry pairs = (Map.Entry)it.next();
-            jcbFornecedor.addItem(pairs);
+            jcbFornecedor.addItem(pairs.getValue());
         }
     }
     
@@ -597,6 +597,19 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
             txtValorVenda.setText(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 4).toString());
             txtFile.setText(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 9).toString());
             
+            int catSel = Integer.parseInt(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 10).toString());
+            CategoriaDAO catDao = new CategoriaDAO();
+            Map<String,String> list = new HashMap<>();
+            list = catDao.listCat();
+            Iterator it = list.entrySet().iterator();
+            while (it.hasNext()){
+                Map.Entry pairs = (Map.Entry) it.next();
+                int catSelMap = Integer.parseInt(pairs.getKey().toString());
+                    if(catSel == catSelMap){
+                        jcbCategoria.setSelectedItem(pairs.getValue());
+                    }
+            }
+   
             
             // O código abaixo é para mostrar a imagem quando usuário clica em uma das ROWs do JTABLE de Produtos
             String pathname = "C:\\Users\\Rafael\\Documents\\NetBeansProjects\\Controle2\\src\\img\\" + txtFile.getText();
