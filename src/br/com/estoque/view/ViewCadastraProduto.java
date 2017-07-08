@@ -19,11 +19,10 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -54,14 +53,14 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         JTProdutos.getTableHeader().getColumnModel().getColumn(0).setMaxWidth(0);
         JTProdutos.getTableHeader().getColumnModel().getColumn(0).setMinWidth(0);
         JTProdutos.getColumnModel().getColumn(1).setPreferredWidth(180);
-        JTProdutos.getColumnModel().getColumn(2).setPreferredWidth(100);
-        JTProdutos.getColumnModel().getColumn(3).setPreferredWidth(50);
-        JTProdutos.getColumnModel().getColumn(4).setPreferredWidth(50);
+        JTProdutos.getColumnModel().getColumn(2).setPreferredWidth(120);
+        JTProdutos.getColumnModel().getColumn(3).setPreferredWidth(70);
+        JTProdutos.getColumnModel().getColumn(4).setPreferredWidth(70);
         JTProdutos.getColumnModel().getColumn(5).setPreferredWidth(50);
         JTProdutos.getColumnModel().getColumn(6).setPreferredWidth(50);
         JTProdutos.getColumnModel().getColumn(7).setPreferredWidth(50);
-        JTProdutos.getColumnModel().getColumn(8).setPreferredWidth(50);
-        JTProdutos.getColumnModel().getColumn(9).setPreferredWidth(100);
+        JTProdutos.getColumnModel().getColumn(8).setPreferredWidth(70);
+        JTProdutos.getColumnModel().getColumn(9).setPreferredWidth(120);
         
         readTableProdutos();
     }
@@ -70,8 +69,33 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
         DefaultTableModel modeloProd = (DefaultTableModel) JTProdutos.getModel();
         modeloProd.setNumRows(0);
         ProdutoDAO dao = new ProdutoDAO();
-        
+               
         for(Produto p : dao.read()){
+            Object categoriaTabela = null;
+            Object fornTabela = null;
+            Object estProd = null;
+            CategoriaDAO daoCat = new CategoriaDAO();
+            FornecedorDAO daoFor = new FornecedorDAO();
+            
+            for(Categoria c : daoCat.read()){
+                if(p.getIdCategoria() == c.getIdCategoria()){
+                   categoriaTabela = c.getDescricao();
+                }    
+            }
+            
+            for(Fornecedor f : daoFor.read()){
+                if(p.getIdFornecedor() == f.getIdFornecedor()){
+                    fornTabela = f.getRazaoSocial();
+                }
+            }
+            
+           
+           if(p.getEstado().booleanValue() == false){
+               estProd = "Desativado";
+           }else{
+               estProd = "Ativo";
+           }
+            
             modeloProd.addRow(new Object[]{
                 p.getIdProduto(),                
                 p.getDescricao(),
@@ -81,11 +105,11 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
                 p.getEstMinimo(),
                 p.getQuantidade(),
                 p.getUnidadeDeMedida(),
-                p.getEstado(),
+                estProd,
                 p.getImagem(),
-                p.getIdCategoria(),
-                p.getIdFornecedor()
-            });
+                categoriaTabela,
+                fornTabela
+            }); 
         }  
     }
     
@@ -213,6 +237,7 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        JTProdutos.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
         JTProdutos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 JTProdutosMouseClicked(evt);
@@ -597,20 +622,19 @@ public class ViewCadastraProduto extends javax.swing.JFrame {
             txtValorVenda.setText(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 4).toString());
             txtFile.setText(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 9).toString());
             
-            int catSel = Integer.parseInt(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 10).toString());
-            CategoriaDAO catDao = new CategoriaDAO();
-            Map<String,String> list = new HashMap<>();
-            list = catDao.listCat();
-            Iterator it = list.entrySet().iterator();
-            while (it.hasNext()){
-                Map.Entry pairs = (Map.Entry) it.next();
-                int catSelMap = Integer.parseInt(pairs.getKey().toString());
-                    if(catSel == catSelMap){
-                        jcbCategoria.setSelectedItem(pairs.getValue());
-                    }
-            }
-   
             
+            String estProd = JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 8).toString();
+            if("Desativado".equals(estProd)){
+                jcbEstado.setSelected(false);
+            }else{
+                jcbEstado.setSelected(true);  
+            }
+            
+            String uniMed = JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 7).toString();
+            jcbUniMed.setSelectedItem(uniMed);
+            jcbCategoria.setSelectedItem(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 10).toString());
+            jcbFornecedor.setSelectedItem(JTProdutos.getValueAt(JTProdutos.getSelectedRow(), 11).toString());
+                       
             // O código abaixo é para mostrar a imagem quando usuário clica em uma das ROWs do JTABLE de Produtos
             String pathname = "C:\\Users\\Rafael\\Documents\\NetBeansProjects\\Controle2\\src\\img\\" + txtFile.getText();
             File file = new File(pathname);
