@@ -12,9 +12,9 @@ import org.apache.commons.mail.SimpleEmail;
 
 public class RelatorioPorEmail {
     
-    public String from = "rafael.cavallin89@gmail.com";
+    public String from = "SEU_EMAIL";
     public String to = null;
-    public String senhaMail = "sistemasulbra";
+    public String senhaMail = "SENHA_DO_EMAIL";
     
     LocalDate hoje = LocalDate.now();
     DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
